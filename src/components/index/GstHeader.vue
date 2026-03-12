@@ -1,9 +1,8 @@
 <template>
   <header class="header">
     <nav class="nav">
-      <router-link to="/" class="brand">
+      <router-link to="/" class="brand" @click.prevent="goHome">
         <img src="@/assets/logoGST.png" alt="Logo Gst" class="logo">
-        <span class="logo-sub">Gestión Técnica</span>
       </router-link>
       <div class="actions">
         <button class="btn-ghost">Iniciar Sesión</button>
@@ -20,9 +19,26 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
 defineProps({ darkMode: Boolean })
 defineEmits(['toggle-menu', 'toggle-dark'])
+
+const router = useRouter()
+const route  = useRoute()
+
+const goHome = () => {
+  if (route.path === '/') {
+    document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' })
+  } else {
+    router.push('/').then(() => {
+      setTimeout(() => {
+        document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    })
+  }
+}
 </script>
 
 <style scoped>
@@ -68,6 +84,12 @@ defineEmits(['toggle-menu', 'toggle-dark'])
 @media (min-width: 640px) {
   .logo-sub {
     display: block;
+  }
+}
+
+@media (min-width: 1440px) {
+  .logo {
+    height: 5vh;
   }
 }
 

@@ -1,12 +1,12 @@
-<template>
-  <div :class="['app', darkMode ? 'dark' : 'light']">
+<template >
+  <div :class="['app', darkMode ? 'dark' : 'light']" id="start">
     <section class="privacy">
       <div class="container">
 
         <!-- Header -->
         <div class="policy-header">
           <div class="badge">
-            <i class="bi bi-shield-lock-fill"></i>
+            <i class="bi bi-shield-lock-fill " ></i>
             Privacidad & Confidencialidad
           </div>
           <h1 class="policy-title">Declaración de Privacidad<br />y Confidencialidad</h1>
@@ -114,8 +114,45 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted, nextTick } from 'vue'
+import { useRoute } from 'vue-router'
+
 defineProps({ darkMode: Boolean })
+
+const route = useRoute()
+
+onMounted(() => {
+  const scrollToHash = () => {
+    if (route.hash) {
+      // route.hash viene como "#start"
+      const id = route.hash.replace('#', '')
+      const element = document.getElementById(id)
+      
+      if (element) {
+        // Scroll suave
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        })
+        console.log('✅ Scroll exitoso a:', id)
+      } else {
+        console.log('⏳ Elemento no encontrado, reintentando...')
+        // Reintento por si el DOM tarda
+        setTimeout(() => {
+          const retryElement = document.getElementById(id)
+          if (retryElement) {
+            retryElement.scrollIntoView({ behavior: 'smooth' })
+          }
+        }, 300)
+      }
+    }
+  }
+
+  // Ejecutar después de que el DOM esté listo
+  nextTick(() => {
+    scrollToHash()
+  })
+})
 </script>
 
 <style scoped>

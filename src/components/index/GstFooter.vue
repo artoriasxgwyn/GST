@@ -47,7 +47,9 @@
         <div class="link-col">
           <h5 class="col-heading">Legal</h5>
           <ul class="link-list">
-            <router-link to="/politicas"><li><a href="#">Política de Privacidad</a></li></router-link>
+            <li>
+              <router-link to="/politicas#start" >Política de Privacidad</router-link>
+            </li>
             <li><a href="#">Términos y Condiciones</a></li>
             <li><a href="#">Política de Cookies</a></li>
             <li><a href="#">Política de Reembolsos</a></li>
@@ -63,16 +65,17 @@
     <div class="footer-bottom">
       <div class="powered-by">
         <span>Powered by</span>
-        <img
-          :src="props.darkMode ? logoWhite : logoBlack"
-          alt="Logo de Operación Sistémica, empresa creadora de GST"
-          class="powered-logo"
-        />
+        <img :src="props.darkMode ? logoWhite : logoBlack" alt="Logo de Operación Sistémica, empresa creadora de GST"
+          class="powered-logo" />
       </div>
       <hr class="divider-v2" />
       <div class="legal-text">
-        <strong><p>© 2019-2026 GST. Todos los derechos reservados.</p></strong>
-        <strong><p>GST - Sistema de Gestión de Servicios Técnicos es un producto propiedad de Operación Sistémica</p></strong>
+        <strong>
+          <p>© 2019-2026 GST. Todos los derechos reservados.</p>
+        </strong>
+        <strong>
+          <p>GST - Sistema de Gestión de Servicios Técnicos es un producto propiedad de Operación Sistémica</p>
+        </strong>
       </div>
     </div>
 
@@ -259,7 +262,9 @@ let props = defineProps({ darkMode: Boolean });
   transition: opacity 0.2s;
 }
 
-.powered-logo:hover { opacity: 1; }
+.powered-logo:hover {
+  opacity: 1;
+}
 
 .divider-v2 {
   background: var(--border);
@@ -283,14 +288,17 @@ let props = defineProps({ darkMode: Boolean });
   color: var(--text-soft);
   transition: color 0.35s;
 }
-.logo{
+
+.logo {
   width: 60%;
 }
+
 @media (max-width:768px) {
-  .logo{
-  width: 30%;
+  .logo {
+    width: 30%;
+  }
 }
-}
+
 /* ══ RESPONSIVE ══ */
 
 /* Tablet (768px–1023px) */
@@ -305,11 +313,17 @@ let props = defineProps({ darkMode: Boolean });
     text-align: center;
   }
 
-  .tagline { margin: 0 auto; }
+  .tagline {
+    margin: 0 auto;
+  }
 
-  .social-icons { justify-content: center; }
+  .social-icons {
+    justify-content: center;
+  }
 
-  .divider-v { display: none; }
+  .divider-v {
+    display: none;
+  }
 
   .links-grid {
     width: 100%;
@@ -322,9 +336,19 @@ let props = defineProps({ darkMode: Boolean });
     text-align: center;
   }
 
-  .powered-by { width: auto; }
-  .divider-v2 { display: none; }
-  .legal-text { width: 100%; text-align: center; align-items: center; }
+  .powered-by {
+    width: auto;
+  }
+
+  .divider-v2 {
+    display: none;
+  }
+
+  .legal-text {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
 }
 
 /* Móvil grande (481px–767px) */
@@ -340,9 +364,17 @@ let props = defineProps({ darkMode: Boolean });
     text-align: center;
   }
 
-  .tagline { margin: 0 auto; }
-  .social-icons { justify-content: center; }
-  .divider-v { display: none; }
+  .tagline {
+    margin: 0 auto;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .divider-v {
+    display: none;
+  }
 
   .links-grid {
     width: 100%;
@@ -351,8 +383,14 @@ let props = defineProps({ darkMode: Boolean });
     gap: 2rem;
   }
 
-  .link-col { align-items: center; text-align: center; }
-  .link-list a:hover { transform: none; }
+  .link-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .link-list a:hover {
+    transform: none;
+  }
 
   .footer-bottom {
     flex-direction: column;
@@ -360,9 +398,18 @@ let props = defineProps({ darkMode: Boolean });
     text-align: center;
   }
 
-  .powered-by { width: auto; }
-  .divider-v2 { width: 80%; height: 1.5px; }
-  .legal-text { align-items: center; }
+  .powered-by {
+    width: auto;
+  }
+
+  .divider-v2 {
+    width: 80%;
+    height: 1.5px;
+  }
+
+  .legal-text {
+    align-items: center;
+  }
 }
 
 /* Móvil pequeño (≤480px) */
@@ -382,9 +429,18 @@ let props = defineProps({ darkMode: Boolean });
     text-align: center;
   }
 
-  .tagline { margin: 0 auto; }
-  .social-icons { justify-content: center; gap: 0.5rem; }
-  .divider-v { display: none; }
+  .tagline {
+    margin: 0 auto;
+  }
+
+  .social-icons {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .divider-v {
+    display: none;
+  }
 
   .links-grid {
     width: 100%;
@@ -393,8 +449,14 @@ let props = defineProps({ darkMode: Boolean });
     gap: 1.5rem;
   }
 
-  .link-col { align-items: center; text-align: center; }
-  .link-list a:hover { transform: none; }
+  .link-col {
+    align-items: center;
+    text-align: center;
+  }
+
+  .link-list a:hover {
+    transform: none;
+  }
 
   .footer-bottom {
     flex-direction: column;
@@ -403,9 +465,18 @@ let props = defineProps({ darkMode: Boolean });
     gap: 0.75rem;
   }
 
-  .powered-by { width: auto; }
-  .divider-v2 { width: 60%; height: 1.5px; }
-  .legal-text { align-items: center; }
+  .powered-by {
+    width: auto;
+  }
+
+  .divider-v2 {
+    width: 60%;
+    height: 1.5px;
+  }
+
+  .legal-text {
+    align-items: center;
+  }
 
   .social-icon {
     width: 2rem;
@@ -416,12 +487,32 @@ let props = defineProps({ darkMode: Boolean });
 
 /* Móvil muy pequeño (≤375px) */
 @media (max-width: 375px) {
-  .logo-text { font-size: 2rem; }
-  .brand-title { font-size: 1rem; }
-  .tagline { font-size: 0.82rem; }
-  .col-heading { font-size: 0.7rem; }
-  .link-list a { font-size: 0.82rem; }
-  .powered-logo { height: 1.4rem; }
-  .legal-text p { font-size: 0.75rem; }
+  .logo-text {
+    font-size: 2rem;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .tagline {
+    font-size: 0.82rem;
+  }
+
+  .col-heading {
+    font-size: 0.7rem;
+  }
+
+  .link-list a {
+    font-size: 0.82rem;
+  }
+
+  .powered-logo {
+    height: 1.4rem;
+  }
+
+  .legal-text p {
+    font-size: 0.75rem;
+  }
 }
 </style>

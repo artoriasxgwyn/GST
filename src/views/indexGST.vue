@@ -1,4 +1,5 @@
 <template>
+  <div id="inicio">
   <main ref="mainRef">
     <GstHero     :dark-mode="darkMode" />
     <GstProblem  :dark-mode="darkMode" />
@@ -8,6 +9,8 @@
     <GstPricing  :dark-mode="darkMode" @toggle-form="emit('toggle-form')" />
    
   </main>
+  </div>
+
 </template>
 
 <script setup>
