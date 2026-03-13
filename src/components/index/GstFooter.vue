@@ -48,7 +48,7 @@
           <ul class="link-list">
             <li><router-link to="/politicas#start">Política de Privacidad</router-link></li>
             <li><router-link to="/terminosYCondiciones#start">Términos y Condiciones</router-link></li>
-            <li><a href="#">Política de Cookies</a></li>
+             <li><router-link to="/cookies#start">Política de Cookies</router-link></li>
             <li><router-link to="/politicasReembolso#start">Política de Reembolsos</router-link></li>
             <li><router-link to="/politicasGarantia#start">Políticas de Garantía</router-link></li>
           </ul>

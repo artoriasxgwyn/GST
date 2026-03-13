@@ -5,6 +5,8 @@ import politicasGST from "@/views/politicasGST.vue";
 import terminosYCondiciones from "@/views/terminosYCondiciones.vue";
 import politicasReembolso from "@/views/politicasReembolsoGST.vue";
 import politicasGarantia from "@/views/politicasGarantiaGST.vue";
+import cookies from "@/views/cookiesGST.vue";
+import carrito from "@/views/carritoGST.vue";
 
 const routes = [
     { path: "/", component: index },
@@ -12,6 +14,8 @@ const routes = [
     { path: "/terminosYCondiciones", component: terminosYCondiciones },
     { path: "/politicasReembolso", component: politicasReembolso },
     { path: "/politicasGarantia", component: politicasGarantia },
+    { path: "/cookies", component: cookies },
+    { path: "/carrito", component: carrito },
 ]
 
 export const router = createRouter({
