@@ -2,11 +2,10 @@
   <header class="header">
     <nav class="nav">
       <router-link to="/" class="brand" @click.prevent="goHome">
-        <img src="@/assets/logoGST.png" alt="Logo Gst" class="logo">
+        <img :src="darkMode ? logoWhite : logoColor" alt="Logo Gst" class="logo">
       </router-link>
       <div class="actions">
         <button class="btn-ghost">Iniciar Sesión</button>
-        <!-- Dark mode toggle -->
         <button class="btn-dark-toggle" @click="$emit('toggle-dark')" :title="darkMode ? 'Modo claro' : 'Modo oscuro'">
           <i :class="darkMode ? 'bi bi-sun-fill' : 'bi bi-moon-fill'"></i>
         </button>
@@ -21,8 +20,10 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import logoColor from '@/assets/logoGST.png'
+import logoWhite from '@/assets/GSTBlanco.png'
 
-defineProps({ darkMode: Boolean })
+ defineProps({ darkMode: Boolean })
 defineEmits(['toggle-menu', 'toggle-dark'])
 
 const router = useRouter()
@@ -70,6 +71,7 @@ const goHome = () => {
 
 .logo {
   height: 6vh;
+  transition: opacity 0.35s ease;
 }
 
 .logo-sub {
@@ -82,15 +84,11 @@ const goHome = () => {
 }
 
 @media (min-width: 640px) {
-  .logo-sub {
-    display: block;
-  }
+  .logo-sub { display: block; }
 }
 
 @media (min-width: 1440px) {
-  .logo {
-    height: 5vh;
-  }
+  .logo { height: 5vh; }
 }
 
 .actions {
@@ -112,14 +110,10 @@ const goHome = () => {
   transition: background 0.2s;
 }
 
-.btn-ghost:hover {
-  background: var(--border-soft);
-}
+.btn-ghost:hover { background: var(--border-soft); }
 
 @media (min-width: 768px) {
-  .btn-ghost {
-    display: inline-block;
-  }
+  .btn-ghost { display: inline-block; }
 }
 
 .btn-dark-toggle {

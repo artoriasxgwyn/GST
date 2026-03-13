@@ -7,7 +7,6 @@
     <GstFeatures :dark-mode="darkMode" />
     <GstAudience :dark-mode="darkMode" />
     <GstPricing  :dark-mode="darkMode" @toggle-form="emit('toggle-form')" />
-   
   </main>
   </div>
 

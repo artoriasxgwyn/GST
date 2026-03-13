@@ -54,7 +54,7 @@
               :class="plan.featured ? 'btn-primary' : 'btn-outline'"
               @click="emit('toggle-form', plan)">
               <i :class="['bi', plan.featured ? 'bi-chat-dots' : plan.rawPrice === 5 ? 'bi-rocket-takeoff' : 'bi-cart-check']"></i>
-              {{ plan.featured ? 'Contactar Ventas' : plan.rawPrice === 5 ? 'Comenzar Gratis' : 'Seleccionar Plan' }}
+              {{ plan.featured ? 'Contactar Ventas' : plan.rawPrice === 5 ? 'Comenzar' : 'Seleccionar Plan' }}
             </button>
           </div>
         </div>

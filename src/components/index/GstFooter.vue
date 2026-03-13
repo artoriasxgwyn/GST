@@ -6,7 +6,7 @@
 
       <!-- Columna brand -->
       <div class="brand-col">
-        <img src="@/assets/logoGST2.png" alt="logoGST" class="logo">
+        <img :src="props.darkMode ? logoGSTWhite : logoGSTColor" alt="logoGST" class="logo">
         <p class="tagline">
           Plataforma digital para la gestión, control y seguimiento de servicios técnicos,
           diseñada para operaciones profesionales.
@@ -46,19 +46,11 @@
         <div class="link-col">
           <h5 class="col-heading">Legal</h5>
           <ul class="link-list">
-            <li>
-              <router-link to="/politicas#start" >Política de Privacidad</router-link>
-            </li>
-             <li>
-              <router-link to="/terminosYCondiciones#start" >Términos y Condiciones</router-link>
-            </li>
+            <li><router-link to="/politicas#start">Política de Privacidad</router-link></li>
+            <li><router-link to="/terminosYCondiciones#start">Términos y Condiciones</router-link></li>
             <li><a href="#">Política de Cookies</a></li>
-            <li>
-              <router-link to="/politicasReembolso#start" >Política de Reembolsos</router-link>
-            </li>
-            <li>
-              <router-link to="/politicasGarantia#start" >Políticas de Garantía</router-link>
-            </li>
+            <li><router-link to="/politicasReembolso#start">Política de Reembolsos</router-link></li>
+            <li><router-link to="/politicasGarantia#start">Políticas de Garantía</router-link></li>
           </ul>
         </div>
       </div>
@@ -70,17 +62,13 @@
     <div class="footer-bottom">
       <div class="powered-by">
         <span>Powered by</span>
-        <img :src="props.darkMode ? logoWhite : logoBlack" alt="Logo de Operación Sistémica, empresa creadora de GST"
+        <img :src="props.darkMode ? logoOSWhite : logoOSColor" alt="Logo de Operación Sistémica, empresa creadora de GST"
           class="powered-logo" />
       </div>
       <hr class="divider-v2" />
       <div class="legal-text">
-        <strong>
-          <p>© 2019-2026 GST. Todos los derechos reservados.</p>
-        </strong>
-        <strong>
-          <p>GST - Sistema de Gestión de Servicios Técnicos es un producto propiedad de Operación Sistémica</p>
-        </strong>
+        <strong><p>© 2019-2026 GST. Todos los derechos reservados.</p></strong>
+        <strong><p>GST - Sistema de Gestión de Servicios Técnicos es un producto propiedad de Operación Sistémica</p></strong>
       </div>
     </div>
 
@@ -89,10 +77,12 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import logoWhite from '@/assets/Operacion Sistemica Blanco.png'
-import logoBlack from '@/assets/Operacion sistemica.png'
-let props = defineProps({ darkMode: Boolean });
+import logoGSTColor from '@/assets/logoGST.png'
+import logoGSTWhite from '@/assets/GSTBlanco.png'
+import logoOSWhite  from '@/assets/Operacion Sistemica Blanco.png'
+import logoOSColor  from '@/assets/Operacion sistemica.png'
 
+const props = defineProps({ darkMode: Boolean })
 </script>
 
 <style scoped>
@@ -104,8 +94,6 @@ let props = defineProps({ darkMode: Boolean });
   border-top: 1px solid var(--border-light);
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
-
-/* ══ TOP ══ */
 .footer-top {
   display: flex;
   width: 100%;
@@ -113,8 +101,6 @@ let props = defineProps({ darkMode: Boolean });
   margin-bottom: 1.5rem;
   align-items: flex-start;
 }
-
-/* ══ BRAND ══ */
 .brand-col {
   display: flex;
   flex-direction: column;
@@ -122,14 +108,6 @@ let props = defineProps({ darkMode: Boolean });
   width: 30%;
   flex-shrink: 0;
 }
-
-.logo-text {
-  font-size: 2.5rem;
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  color: var(--accent);
-}
-
 .tagline {
   font-size: 0.88rem;
   color: var(--text-muted);
@@ -137,14 +115,12 @@ let props = defineProps({ darkMode: Boolean });
   max-width: 22rem;
   transition: color 0.35s;
 }
-
 .social-icons {
   display: flex;
   gap: 0.6rem;
   flex-wrap: wrap;
   margin-top: 0.25rem;
 }
-
 .social-icon {
   display: flex;
   align-items: center;
@@ -158,14 +134,11 @@ let props = defineProps({ darkMode: Boolean });
   transition: all 0.2s ease;
   text-decoration: none;
 }
-
 .social-icon:hover {
   background: var(--accent);
   color: var(--accent-text);
   transform: translateY(-3px);
 }
-
-/* ══ DIVIDER VERTICAL ══ */
 .divider-v {
   background: var(--border);
   width: 1.5px;
@@ -175,20 +148,13 @@ let props = defineProps({ darkMode: Boolean });
   flex-shrink: 0;
   transition: background 0.35s;
 }
-
-/* ══ LINKS ══ */
 .links-grid {
   display: flex;
   justify-content: space-around;
   flex: 1;
   gap: 1.5rem;
 }
-
-.link-col {
-  display: flex;
-  flex-direction: column;
-}
-
+.link-col { display: flex; flex-direction: column; }
 .col-heading {
   font-size: 0.75rem;
   font-weight: 700;
@@ -198,7 +164,6 @@ let props = defineProps({ darkMode: Boolean });
   margin-bottom: 1.25rem;
   transition: color 0.35s;
 }
-
 .link-list {
   list-style: none;
   padding: 0;
@@ -207,7 +172,6 @@ let props = defineProps({ darkMode: Boolean });
   flex-direction: column;
   gap: 0.6rem;
 }
-
 .link-list a {
   font-size: 0.88rem;
   color: var(--text-muted);
@@ -215,13 +179,10 @@ let props = defineProps({ darkMode: Boolean });
   transition: color 0.2s, transform 0.2s;
   display: inline-block;
 }
-
 .link-list a:hover {
   color: var(--accent);
   transform: translateX(3px);
 }
-
-/* ══ DIVIDER HORIZONTAL ══ */
 .divider-h {
   background: var(--border);
   width: 100%;
@@ -230,8 +191,6 @@ let props = defineProps({ darkMode: Boolean });
   margin: 1rem 0;
   transition: background 0.35s;
 }
-
-/* ══ BOTTOM ══ */
 .footer-bottom {
   display: flex;
   align-items: center;
@@ -241,7 +200,6 @@ let props = defineProps({ darkMode: Boolean });
   color: var(--text-soft);
   transition: color 0.35s;
 }
-
 .powered-by {
   display: flex;
   flex-direction: column;
@@ -251,18 +209,13 @@ let props = defineProps({ darkMode: Boolean });
   flex-shrink: 0;
   font-size: 0.8rem;
 }
-
 .powered-logo {
   height: 4rem;
   width: auto;
   opacity: 0.8;
   transition: opacity 0.2s;
 }
-
-.powered-logo:hover {
-  opacity: 1;
-}
-
+.powered-logo:hover { opacity: 1; }
 .divider-v2 {
   background: var(--border);
   width: 1.5px;
@@ -271,245 +224,68 @@ let props = defineProps({ darkMode: Boolean });
   flex-shrink: 0;
   transition: background 0.35s;
 }
-
 .legal-text {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   flex: 1;
 }
-
 .legal-text p {
   margin: 0;
   font-size: 0.8rem;
   color: var(--text-soft);
   transition: color 0.35s;
 }
+.logo { width: 60%; transition: opacity 0.35s; }
+@media (max-width: 768px) { .logo { width: 30%; } }
 
-.logo {
-  width: 60%;
-}
-
-@media (max-width:768px) {
-  .logo {
-    width: 30%;
-  }
-}
-
-/* ══ RESPONSIVE ══ */
-
-/* Tablet (768px–1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .footer-top {
-    flex-wrap: wrap;
-  }
-
-  .brand-col {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .tagline {
-    margin: 0 auto;
-  }
-
-  .social-icons {
-    justify-content: center;
-  }
-
-  .divider-v {
-    display: none;
-  }
-
-  .links-grid {
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .footer-bottom {
-    flex-wrap: wrap;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .powered-by {
-    width: auto;
-  }
-
-  .divider-v2 {
-    display: none;
-  }
-
-  .legal-text {
-    width: 100%;
-    text-align: center;
-    align-items: center;
-  }
+  .footer-top { flex-wrap: wrap; }
+  .brand-col { width: 100%; align-items: center; text-align: center; }
+  .tagline { margin: 0 auto; }
+  .social-icons { justify-content: center; }
+  .divider-v { display: none; }
+  .links-grid { width: 100%; justify-content: space-around; }
+  .footer-bottom { flex-wrap: wrap; justify-content: center; text-align: center; }
+  .powered-by { width: auto; }
+  .divider-v2 { display: none; }
+  .legal-text { width: 100%; text-align: center; align-items: center; }
 }
-
-/* Móvil grande (481px–767px) */
 @media (min-width: 481px) and (max-width: 767px) {
-  .footer-top {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .brand-col {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .tagline {
-    margin: 0 auto;
-  }
-
-  .social-icons {
-    justify-content: center;
-  }
-
-  .divider-v {
-    display: none;
-  }
-
-  .links-grid {
-    width: 100%;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 2rem;
-  }
-
-  .link-col {
-    align-items: center;
-    text-align: center;
-  }
-
-  .link-list a:hover {
-    transform: none;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .powered-by {
-    width: auto;
-  }
-
-  .divider-v2 {
-    width: 80%;
-    height: 1.5px;
-  }
-
-  .legal-text {
-    align-items: center;
-  }
+  .footer-top { flex-direction: column; align-items: center; }
+  .brand-col { width: 100%; align-items: center; text-align: center; }
+  .tagline { margin: 0 auto; }
+  .social-icons { justify-content: center; }
+  .divider-v { display: none; }
+  .links-grid { width: 100%; justify-content: space-around; flex-wrap: wrap; gap: 2rem; }
+  .link-col { align-items: center; text-align: center; }
+  .link-list a:hover { transform: none; }
+  .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
+  .powered-by { width: auto; }
+  .divider-v2 { width: 80%; height: 1.5px; }
+  .legal-text { align-items: center; }
 }
-
-/* Móvil pequeño (≤480px) */
 @media (max-width: 480px) {
-  .footer {
-    padding: 2rem 1rem 1rem;
-  }
-
-  .footer-top {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .brand-col {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-  }
-
-  .tagline {
-    margin: 0 auto;
-  }
-
-  .social-icons {
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .divider-v {
-    display: none;
-  }
-
-  .links-grid {
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .link-col {
-    align-items: center;
-    text-align: center;
-  }
-
-  .link-list a:hover {
-    transform: none;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .powered-by {
-    width: auto;
-  }
-
-  .divider-v2 {
-    width: 60%;
-    height: 1.5px;
-  }
-
-  .legal-text {
-    align-items: center;
-  }
-
-  .social-icon {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
-  }
+  .footer { padding: 2rem 1rem 1rem; }
+  .footer-top { flex-direction: column; align-items: center; }
+  .brand-col { width: 100%; align-items: center; text-align: center; }
+  .tagline { margin: 0 auto; }
+  .social-icons { justify-content: center; gap: 0.5rem; }
+  .divider-v { display: none; }
+  .links-grid { width: 100%; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .link-col { align-items: center; text-align: center; }
+  .link-list a:hover { transform: none; }
+  .footer-bottom { flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; }
+  .powered-by { width: auto; }
+  .divider-v2 { width: 60%; height: 1.5px; }
+  .legal-text { align-items: center; }
+  .social-icon { width: 2rem; height: 2rem; font-size: 1rem; }
 }
-
-/* Móvil muy pequeño (≤375px) */
 @media (max-width: 375px) {
-  .logo-text {
-    font-size: 2rem;
-  }
-
-  .brand-title {
-    font-size: 1rem;
-  }
-
-  .tagline {
-    font-size: 0.82rem;
-  }
-
-  .col-heading {
-    font-size: 0.7rem;
-  }
-
-  .link-list a {
-    font-size: 0.82rem;
-  }
-
-  .powered-logo {
-    height: 1.4rem;
-  }
-
-  .legal-text p {
-    font-size: 0.75rem;
-  }
+  .tagline { font-size: 0.82rem; }
+  .col-heading { font-size: 0.7rem; }
+  .link-list a { font-size: 0.82rem; }
+  .powered-logo { height: 1.4rem; }
+  .legal-text p { font-size: 0.75rem; }
 }
 </style>

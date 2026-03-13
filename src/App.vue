@@ -3,7 +3,6 @@
     <GstHeader :dark-mode="darkMode" @toggle-menu="menuOpen = !menuOpen" @toggle-dark="toggleDarkMode" class="header" />
     <router-view :dark-mode="darkMode" @toggle-form="toggleForm" />
     <GstFooter :dark-mode="darkMode" />
-    <GstBottomNav :dark-mode="darkMode" />
     <WompiForm :dark-mode="darkMode" class="wompiForm" v-show="isForm" />
   </div>
 </template>
@@ -12,7 +11,7 @@
 import { ref, onMounted, watch } from 'vue'
 import WompiForm from './components/Pays/WompiForm.vue'
 import GstHeader from './components/index/GstHeader.vue'
-import GstBottomNav from './components/index/GstBottomNav.vue'
+//import GstBottomNav from './components/index/GstBottomNav.vue'
 import GstFooter from './components/index/GstFooter.vue'
 
 const isForm = ref(false)
