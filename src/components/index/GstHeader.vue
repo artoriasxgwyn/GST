@@ -6,7 +6,7 @@
       </router-link>
       <div class="actions">
         <!-- Botón Carrito -->
-        <router-link to="/carrito" class="btn-cart" :title="'Ver carrito'">
+        <router-link to="/carrito#start" class="btn-cart" :title="'Ver carrito'">
           <i class="bi bi-cart-fill"></i>
           <span class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
@@ -55,6 +55,7 @@ const goHome = () => {
     })
   }
 }
+
 </script>
 
 <style scoped>

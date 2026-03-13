@@ -147,14 +147,15 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted } from 'vue'
+import { defineProps, onMounted, nextTick } from 'vue'
 import { useCartStore } from '@/stores/cartStore'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const cart   = useCartStore()
 const router = useRouter()
+const route  = useRoute()
 
 const goToPlans = () => {
   router.push('/').then(() => {
@@ -164,7 +165,15 @@ const goToPlans = () => {
   })
 }
 
-onMounted(() => { cart.loadFromStorage() })
+onMounted(() => {
+  cart.loadFromStorage()
+  nextTick(() => {
+    if (route.hash) {
+      const el = document.querySelector(route.hash)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+  })
+})
 </script>
 
 <style scoped>
