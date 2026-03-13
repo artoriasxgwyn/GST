@@ -7,7 +7,6 @@
       <!-- Columna brand -->
       <div class="brand-col">
         <img src="@/assets/logoGST2.png" alt="logoGST" class="logo">
-        <h3 class="brand-title">Gestión de <br />servicio técnico</h3>
         <p class="tagline">
           Plataforma digital para la gestión, control y seguimiento de servicios técnicos,
           diseñada para operaciones profesionales.
@@ -50,10 +49,16 @@
             <li>
               <router-link to="/politicas#start" >Política de Privacidad</router-link>
             </li>
-            <li><a href="#">Términos y Condiciones</a></li>
+             <li>
+              <router-link to="/terminosYCondiciones#start" >Términos y Condiciones</router-link>
+            </li>
             <li><a href="#">Política de Cookies</a></li>
-            <li><a href="#">Política de Reembolsos</a></li>
-            <li><a href="#">Políticas de Garantía</a></li>
+            <li>
+              <router-link to="/politicasReembolso#start" >Política de Reembolsos</router-link>
+            </li>
+            <li>
+              <router-link to="/politicasGarantia#start" >Políticas de Garantía</router-link>
+            </li>
           </ul>
         </div>
       </div>
@@ -123,14 +128,6 @@ let props = defineProps({ darkMode: Boolean });
   font-weight: 900;
   letter-spacing: -0.06em;
   color: var(--accent);
-}
-
-.brand-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  line-height: 1.4;
-  transition: color 0.35s;
 }
 
 .tagline {

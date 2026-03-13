@@ -1,6 +1,6 @@
 <template >
   <div :class="['app', darkMode ? 'dark' : 'light']" id="start">
-    <section class="privacy">
+    <section class="privacy" id="start">
       <div class="container">
 
         <!-- Header -->
