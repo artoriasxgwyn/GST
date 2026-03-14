@@ -287,5 +287,10 @@ const props = defineProps({ darkMode: Boolean })
   .link-list a { font-size: 0.82rem; }
   .powered-logo { height: 1.4rem; }
   .legal-text p { font-size: 0.75rem; }
+}@media (max-width:425px) {
+  
+  .logo{
+width: 10rem;
+  }
 }
 </style>

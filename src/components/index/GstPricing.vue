@@ -55,7 +55,7 @@
 
             <button :class="plan.featured ? 'gst-btn-primary' : 'gst-btn-outline'" @click.stop="addPlanToCart(plan)">
               <i :class="['bi', plan.rawPrice === 5 ? 'bi-rocket-takeoff' : 'bi-cart-check']"></i>
-              {{ plan.rawPrice === 5 ? 'Comenzar Gratis' : 'Agregar al carrito' }}
+                Agregar al carrito 
             </button>
           </div>
         </div>

@@ -103,6 +103,7 @@ onUnmounted(() => {
   }
 }
 
+
 @media (min-width:769px) and (max-width:1024px) {
   .hero {
     height: 33rem;
@@ -315,6 +316,16 @@ onUnmounted(() => {
   .btn-primary {
     font-size: 0.9rem;
     padding: 0.7rem 1.5rem;
+  }
+}
+@media (max-width:425px) {
+  .content-col {
+   text-align: center;
+   display: flex;
+   align-items: center;
+  }
+  .hero{
+aspect-ratio: 13/9 !important;
   }
 }
 </style>
