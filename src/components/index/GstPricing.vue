@@ -94,7 +94,7 @@
         </h3>
         <p class="gst-storage-subtitle">
           <i class="bi bi-cloud-arrow-up"></i>
-          Se pueden contratar con cualquier plan • Integración con Google Drive
+          Se pueden contratar con cualquier plan 
         </p>
       </div>
     </div>

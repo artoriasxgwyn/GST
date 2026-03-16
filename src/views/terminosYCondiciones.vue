@@ -3,7 +3,7 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="terms-header">
+      <div class="terms-header anim-item">
         <div class="badge">
           <i class="bi bi-file-earmark-text-fill"></i>
           Términos & Condiciones
@@ -153,7 +153,7 @@
       </div>
 
       <!-- Footer note -->
-      <div class="terms-footer">
+      <div class="terms-footer anim-item">
         <i class="bi bi-building"></i>
         <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019–2026 GST. Todos los derechos reservados.</span>
       </div>
@@ -171,20 +171,35 @@ defineProps({ darkMode: Boolean })
 const route = useRoute()
 
 onMounted(() => {
-  const scrollToHash = () => {
+  nextTick(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
-      const element = document.getElementById(id)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
       } else {
         setTimeout(() => {
           document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
         }, 300)
       }
     }
-  }
-  nextTick(() => { scrollToHash() })
+
+    document.querySelectorAll('.anim-item').forEach((el, i) => {
+      setTimeout(() => el.classList.add('slide-in-left'), i * 200)
+    })
+
+    const cards = document.querySelectorAll('.section-card')
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = [...cards].indexOf(entry.target)
+          entry.target.classList.add(index % 2 === 0 ? 'slide-in-left' : 'slide-in-right')
+          cardObserver.unobserve(entry.target)
+        }
+      })
+    }, { threshold: 0.1 })
+    cards.forEach(el => cardObserver.observe(el))
+  })
 })
 </script>
 
@@ -275,6 +290,8 @@ onMounted(() => {
   border: 1px solid var(--border-soft);
   border-radius: 1.25rem;
   padding: 1.75rem;
+  opacity: 0;
+  opacity: 0;
   transition: background 0.35s, border-color 0.35s;
 }
 
@@ -366,6 +383,74 @@ onMounted(() => {
 }
 
 .terms-footer i { color: var(--accent); }
+
+/* ══ ANIMACIONES ══ */
+.anim-item { opacity: 0; }
+
+.slide-in-left, .slide-in-right {
+  opacity: 1 !important;
+  -webkit-animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+          animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@-webkit-keyframes slide-in-top {
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-top {
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ══ ANIMACIONES ══ */
+.anim-item { opacity: 0; }
+
+.slide-in-left, .slide-in-right {
+  opacity: 1 !important;
+  -webkit-animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+          animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@-webkit-keyframes slide-in-top {
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-top {
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 /* ══ RESPONSIVE ══ */
 @media (max-width: 640px) {

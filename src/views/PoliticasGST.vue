@@ -170,28 +170,22 @@ onMounted(() => {
       }
     }
 
-    // Observer para anim-item (slide-in-top)
-    const animItems = document.querySelectorAll('.anim-item')
-    const topObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('slide-in-top')
-          topObserver.unobserve(entry.target)
-        }
-      })
-    }, { threshold: 0.3 })
-    animItems.forEach(el => topObserver.observe(el))
+    // Header e intro animados inmediatamente al montar
+    document.querySelectorAll('.anim-item').forEach((el, i) => {
+      setTimeout(() => el.classList.add('slide-in-left'), i * 200)
+    })
 
-    // Observer para section-card (slide-in-fwd-center)
+    // Observer para section-card (fade-in) al 10%
     const cards = document.querySelectorAll('.section-card')
     const cardObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('slide-in-fwd-center')
+          const index = [...cards].indexOf(entry.target)
+          entry.target.classList.add(index % 2 === 0 ? 'slide-in-left' : 'slide-in-right')
           cardObserver.unobserve(entry.target)
         }
       })
-    }, { threshold: 0.3 })
+    }, { threshold: 0.1 })
     cards.forEach(el => cardObserver.observe(el))
   })
 })
@@ -296,7 +290,6 @@ onMounted(() => {
   flex-direction: column;
   gap: 1.25rem;
   margin-bottom: 2.5rem;
-  perspective: 1400px;
 }
 
 .section-card {
@@ -414,37 +407,37 @@ onMounted(() => {
 
 /* ══ ANIMACIONES ══ */
 
-/* Oculto hasta que el observer lo active */
 .anim-item { opacity: 0; }
 
-.slide-in-top {
+.slide-in-left, .slide-in-right {
   opacity: 1 !important;
   -webkit-animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-}
-
-.slide-in-fwd-center {
-  opacity: 1 !important;
-  -webkit-animation: slide-in-fwd-center 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  animation: slide-in-fwd-center 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+          animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
 @-webkit-keyframes slide-in-top {
-  0% { -webkit-transform: translateY(-60px); transform: translateY(-60px); opacity: 0; }
-  100% { -webkit-transform: translateY(0); transform: translateY(0); opacity: 1; }
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
 }
 @keyframes slide-in-top {
-  0% { -webkit-transform: translateY(-60px); transform: translateY(-60px); opacity: 0; }
-  100% { -webkit-transform: translateY(0); transform: translateY(0); opacity: 1; }
-}
-
-@-webkit-keyframes slide-in-fwd-center {
-  0% { -webkit-transform: translateZ(-1400px); transform: translateZ(-1400px); opacity: 0; }
-  100% { -webkit-transform: translateZ(0); transform: translateZ(0); opacity: 1; }
-}
-@keyframes slide-in-fwd-center {
-  0% { -webkit-transform: translateZ(-1400px); transform: translateZ(-1400px); opacity: 0; }
-  100% { -webkit-transform: translateZ(0); transform: translateZ(0); opacity: 1; }
+  0% {
+    -webkit-transform: translateY(-1000px);
+            transform: translateY(-1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ══ RESPONSIVE ══ */
