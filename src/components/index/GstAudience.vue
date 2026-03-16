@@ -69,22 +69,8 @@ const audience = [
 /* Grid responsive */
 .grid { 
   display: grid; 
-  grid-template-columns: 1fr; /* 1 columna en móvil */
+  grid-template-columns: repeat(3, 1fr); /* 1 columna en móvil */
   gap: 1.5rem; /* Gap reducido en móvil */
-}
-
-@media (min-width: 480px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet pequeña */
-    gap: 2rem;
-  }
-}
-
-@media (min-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
-    gap: 2rem;
-  }
 }
 
 .item { 

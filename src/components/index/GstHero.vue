@@ -194,7 +194,7 @@ onUnmounted(() => {
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 1rem;
-  color: var(--text);
+  color: var(--title);
   transition: color 0.35s;
 }
 

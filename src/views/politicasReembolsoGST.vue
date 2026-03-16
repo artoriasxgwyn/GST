@@ -15,6 +15,8 @@
           <i class="bi bi-envelope-fill"></i> contacto@gst.com.co
           <span class="dot">·</span>
           <i class="bi bi-telephone-fill"></i> +57 301 573 9461
+          <span class="dot">·</span>
+          <i class="bi bi-calendar3"></i> Última actualización: Marzo 2026
         </p>
         <p class="refund-intro">
           En <strong>GST – Gestión Servicio Técnico</strong> nos comprometemos a garantizar la

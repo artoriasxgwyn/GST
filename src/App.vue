@@ -38,6 +38,7 @@ const toggleDarkMode = () => { darkMode.value = !darkMode.value }
 /* MODO CLARO */
 .light {
   --bg: #ffffff;
+  --title: #59a1e0;
   --bg-alt: #eaf8f8;
   --bg-card: #ffffff;
   --header-bg: rgba(255, 255, 255, 0.88);
@@ -66,8 +67,9 @@ const toggleDarkMode = () => { darkMode.value = !darkMode.value }
   --bg: #1D1D1B;
   --bg-alt: #151514;
   --bg-card: #262624;
+  --title: #f0f0ef;
   --text: #f0f0ef;
-  --text-muted: #8a9aaa;
+  --text-muted: #eaf8f8;
   --text-soft: #a0aec0;
   --border: rgba(80, 238, 173, 0.2);
   --border-soft: rgba(80, 238, 173, 0.08);
@@ -220,6 +222,7 @@ button {
     opacity: 1;
   }
 }
+
 /* ===== TOAST GLOBAL ===== */
 .gst-toast-msg {
   position: fixed;
@@ -241,6 +244,12 @@ button {
   gap: 0.75rem;
   white-space: nowrap;
   transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
+}
+
+@media (max-width:425px) {
+  .gst-toast-msg {
+    height: min-content;
+  }
 }
 
 .gst-toast-msg i {
@@ -289,7 +298,7 @@ button {
     padding: 0.8rem 1rem;
     border-radius: 1.2rem;
   }
-  
+
   .gst-toast-msg i {
     font-size: 1rem;
   }

@@ -13,6 +13,8 @@
           <i class="bi bi-building"></i> GST – Gestión Servicio Técnico
           <span class="dot">·</span>
           <i class="bi bi-envelope-fill"></i> contacto@gst.com.co
+          <span class="dot">·</span>
+          <i class="bi bi-calendar3"></i> Última actualización: Marzo 2026
         </p>
         <p class="cookies-intro">
           Nuestra Política de Cookies explica cómo usamos las cookies y tecnologías similares
@@ -62,6 +64,10 @@
                 <span><strong>Publicidad:</strong> podemos usar cookies para mostrar contenido relevante a tus intereses en caso de que existan promociones o alianzas comerciales.</span>
               </li>
             </ul>
+            <p>
+              Las cookies utilizadas por GST <strong>no recopilan información personal sensible</strong>
+              ni acceden a información almacenada fuera de la plataforma.
+            </p>
           </div>
         </div>
 

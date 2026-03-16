@@ -11,17 +11,11 @@
           <span class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
         
-        <!-- Botón Iniciar Sesión -->
-        
         <!-- Dark mode toggle -->
         <button class="btn-dark-toggle" @click="$emit('toggle-dark')" :title="darkMode ? 'Modo claro' : 'Modo oscuro'">
           <i :class="darkMode ? 'bi bi-sun-fill' : 'bi bi-moon-fill'"></i>
         </button>
         
-        <!-- Menú hamburguesa -->
-        <button class="btn-icon" @click="$emit('toggle-menu')">
-          <i class="bi bi-list"></i>
-        </button>
       </div>
     </nav>
   </header>
@@ -203,8 +197,8 @@ const goHome = () => {
 /* Responsive para móviles */
 @media (max-width: 480px) {
   .btn-cart {
-    width: 2rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 2.2rem;
     font-size: 1rem;
   }
   
