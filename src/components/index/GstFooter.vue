@@ -288,7 +288,7 @@ const props = defineProps({ darkMode: Boolean })
   .powered-logo { height: 1.4rem; }
   .legal-text p { font-size: 0.75rem; }
 }@media (max-width:425px) {
-  
+    .powered-logo { height: 5rem; }
   .logo{
 width: 10rem;
   }

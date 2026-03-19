@@ -677,7 +677,17 @@ onMounted(() => {
     padding: 1.25rem;
   }
 
-  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; }
+  .section-card, .contact-cta { align-items: center; text-align: center; }
+  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; align-self: center; }
+  .section-body { text-align: center; }
+  .exclusion-list, .check-list { text-align: left; }
+  .exclusion-list li, .check-list li { display: block; padding-left: 1.5rem; position: relative; }
+  .exclusion-list li i, .check-list li i { position: absolute; left: 0; top: 0.2rem; }
+  .subsection-title { justify-content: center; }
+  .sub-card { flex-direction: column; align-items: center; text-align: center; }
+  .channels { justify-content: center; }
+  .steps .step { flex-direction: column; align-items: center; text-align: center; }
+  .limit-note { flex-direction: column; align-items: center; text-align: center; }
   .warranty-title { font-size: clamp(1.5rem, 7vw, 1.8rem); }
   .warranty-intro { padding: 1rem; font-size: 0.88rem; }
   .warranty-meta { font-size: 0.75rem; }

@@ -508,11 +508,22 @@ onMounted(() => {
 
   .section-card {
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
     padding: 1.25rem;
+    text-align: center;
   }
 
-  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; }
+  .section-body { text-align: center; }
+  .check-list { text-align: left; }
+  .check-list li { display: block; padding-left: 1.5rem; position: relative; }
+  .check-list li i { position: absolute; left: 0; top: 0.2rem; }
+  .type-card { flex-direction: column; align-items: center; text-align: center; }
+  .channels { justify-content: center; }
+  .cookies-footer { text-align: center; }
+
+  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; align-self: center; }
+  .type-icon { align-self: center; }
   .cookies-title { font-size: clamp(1.5rem, 7vw, 1.8rem); }
   .cookies-intro { padding: 1rem; font-size: 0.88rem; }
   .channels { gap: 0.4rem; }

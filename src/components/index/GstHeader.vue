@@ -101,7 +101,12 @@ const goHome = () => {
 
 @media (min-width: 1440px) {
   .logo {
-    height: 5vh;
+    height: 4vh;
+  }
+}
+@media (min-width: 2560px) {
+  .logo {
+    height: 2vh;
   }
 }
 

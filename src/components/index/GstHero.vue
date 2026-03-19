@@ -318,7 +318,7 @@ onUnmounted(() => {
     padding: 0.7rem 1.5rem;
   }
 }
-@media (max-width:425px) {
+@media (max-width:600px) {
   .content-col {
    text-align: center;
    display: flex;

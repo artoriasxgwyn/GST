@@ -444,11 +444,17 @@ onMounted(() => {
 @media (max-width: 640px) {
   .privacy { padding: 3rem 0 2rem; }
   .container { padding: 0 1rem; }
-  .section-card { flex-direction: column; gap: 1rem; padding: 1.25rem; }
-  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; }
+  .section-card { flex-direction: column; align-items: center; gap: 1rem; padding: 1.25rem; }
+  .section-icon { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; align-self: center; }
+  .section-title { text-align: center; }
+  .section-body > p { text-align: center; }
+  .security-list { text-align: left; }
+  .security-list li { display: block; padding-left: 1.5rem; position: relative; }
+  .security-list li i { position: absolute; left: 0; top: 0.2rem; }
+  .contact-block { align-items: flex-start; }
   .policy-title { font-size: clamp(1.5rem, 7vw, 1.8rem); }
-  .intro-card { padding: 1.25rem; }
-  .features-grid { gap: 0.4rem; }
+  .intro-card { padding: 1.25rem; text-align: center; }
+  .features-grid { gap: 0.4rem; justify-content: center; }
   .feature-pill { font-size: 0.76rem; }
 }
 </style>

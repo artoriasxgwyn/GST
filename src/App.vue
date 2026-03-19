@@ -287,7 +287,7 @@ button {
 
 @media (max-width: 480px) {
   .gst-toast-msg {
-    top: auto;
+    top: 4rem;
     bottom: 5rem;
     right: 1rem;
     left: 1rem;
