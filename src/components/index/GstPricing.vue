@@ -25,19 +25,15 @@
 
     <!-- ══ CARRUSEL PLANES ══ -->
     <div class="carousel-container">
-      <button class="carr-arrow carr-arrow--left" @click="prevPlan" :disabled="currentPlanIndex === 0" aria-label="Anterior">
+      <button class="carr-arrow carr-arrow--left" @click="prevPlan" :disabled="currentPlanIndex === 0"
+        aria-label="Anterior">
         <i class="bi bi-chevron-left"></i>
       </button>
-      <div class="carousel-viewport" ref="planViewport"
-        @mousedown="onMouseDown"
-        @mousemove="onMouseMove"
-        @mouseup="onMouseUp"
-        @mouseleave="onMouseLeave"
-        @touchstart.passive="onTouchStart"
-        @touchmove.passive="onTouchMove"
-        @touchend="onTouchEnd"
-        :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
-        <div class="plans-track" :style="{ transform: `translateX(${planTrackOffset}px)`, transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)' }">
+      <div class="carousel-viewport" ref="planViewport" @mousedown="onMouseDown" @mousemove="onMouseMove"
+        @mouseup="onMouseUp" @mouseleave="onMouseLeave" @touchstart.passive="onTouchStart"
+        @touchmove.passive="onTouchMove" @touchend="onTouchEnd" :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
+        <div class="plans-track"
+          :style="{ transform: `translateX(${planTrackOffset}px)`, transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)' }">
           <div v-for="(plan, i) in plans" :key="plan.name" class="plan-card"
             :class="{ featured: plan.featured, 'plan-card--centered': i === currentPlanIndex, 'plan-card--selected': selectedPlanIndex === i }"
             @click="selectPlan(i)">
@@ -62,16 +58,15 @@
             </ul>
             <p class="plan-ideal"><i class="bi bi-info-circle"></i> {{ plan.ideal }}</p>
 
-            <button
-              :class="plan.featured ? 'btn-primary' : 'btn-outline'"
-              @click.stop="addPlanToCart(plan)">
+            <button :class="plan.featured ? 'btn-primary' : 'btn-outline'" @click.stop="addPlanToCart(plan)">
               <i :class="['bi', plan.rawPrice === 5 ? 'bi-rocket-takeoff' : 'bi-cart-check']"></i>
               Agregar al carrito
             </button>
           </div>
         </div>
       </div>
-      <button class="carr-arrow carr-arrow--right" @click="nextPlan" :disabled="currentPlanIndex === plans.length - 1" aria-label="Siguiente">
+      <button class="carr-arrow carr-arrow--right" @click="nextPlan" :disabled="currentPlanIndex === plans.length - 1"
+        aria-label="Siguiente">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
@@ -79,7 +74,8 @@
     <div class="pagination-dots">
       <span class="page-indicator">{{ currentPlanIndex + 1 }} / {{ plans.length }}</span>
       <div class="dots">
-        <button v-for="(plan, i) in plans" :key="i" class="dot" :class="{ 'dot--active': i === currentPlanIndex }" @click="goToPlan(i)"></button>
+        <button v-for="(plan, i) in plans" :key="i" class="dot" :class="{ 'dot--active': i === currentPlanIndex }"
+          @click="goToPlan(i)"></button>
       </div>
       <span class="plan-name-indicator">{{ plans[currentPlanIndex].name }}</span>
     </div>
@@ -112,16 +108,19 @@
     <div class="storage-cards-wrap">
 
       <!-- Card 1: 1 TB fijo -->
-      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 0 }" @click="selectStorage(0)">
+      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 0 }"
+        @click="selectStorage(0)">
         <i class="bi bi-hdd-stack-fill storage-icon"></i>
         <div class="storage-size">1 TB</div>
         <div class="storage-price">$11 USD <span>/ mes</span></div>
         <div class="storage-note">1,024 GB × $40 COP/GB</div>
-        <button class="btn-storage" @click.stop="addStorageToCart(1, 11)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+        <button class="btn-storage" @click.stop="addStorageToCart(1, 11)"><i class="bi bi-cart-check"></i> Agregar al
+          carrito</button>
       </div>
 
       <!-- Card 2: 2–5 TB variable con botones -->
-      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 1 }" @click="selectStorage(1)">
+      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 1 }"
+        @click="selectStorage(1)">
         <i class="bi bi-hdd-rack-fill storage-icon"></i>
         <div class="storage-size">{{ inputTB }} TB</div>
         <div class="storage-price">${{ inputPrice }} USD <span>/ mes</span></div>
@@ -131,7 +130,8 @@
           <span class="input-val">{{ inputTB }} TB</span>
           <button class="input-btn" @click="inputTB < 5 && inputTB++"><i class="bi bi-plus"></i></button>
         </div>
-        <button class="btn-storage" @click.stop="addStorageToCart(inputTB, inputPrice)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
+        <button class="btn-storage" @click.stop="addStorageToCart(inputTB, inputPrice)"><i class="bi bi-cart-check"></i>
+          Agregar al carrito</button>
       </div>
 
     </div>
@@ -191,6 +191,10 @@ const addPlanToCart = (plan) => {
 }
 
 const addStorageToCart = (size, price) => {
+  if (!cart.plan) {
+    showToast('Primero selecciona un plan GST')
+    return
+  }
   cart.setStorage({ size, price, months: 1 })
   showToast(`Almacenamiento ${size} TB agregado al carrito`)
 }
@@ -204,32 +208,18 @@ const currentPlanIndex    = ref(0)
 const screenWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
 const updateScreenWidth = () => { screenWidth.value = window.innerWidth }
 
-// ══ LÍMITES CON MARGEN DE SEGURIDAD (EPSILON) ══
+// ══ LÍMITES CON MARGEN DE SEGURIDAD PARA XIAOMI ══
 const getBounds = () => {
   if (!planViewport.value) return { min: 0, max: 0 }
-
-  // Usamos getBoundingClientRect para mayor precisión
   const rect = planViewport.value.getBoundingClientRect()
   const vw = rect.width
-
   const cardW = planCardWidth.value
   const gap = planGap.value
   const totalTrackWidth = cardW * plans.length + gap * (plans.length - 1)
-
-  // Offset que centra la primera card
   const minOffset = (vw - cardW) / 2
-
-  // Offset que centra la última card
   let maxOffset = vw - totalTrackWidth - (vw - cardW) / 2
-
-  // Pequeño epsilon para evitar redondeos en móviles (0.5px suele ser suficiente)
-  const EPSILON = 0.5
-
-  // Ajustamos los límites para que el centrado sea perfecto
-  return {
-    min: minOffset,
-    max: maxOffset - EPSILON  // Restamos un pelín para que no se desplace a la izquierda
-  }
+  const EPSILON = 1.5
+  return { min: minOffset, max: maxOffset - EPSILON }
 }
 
 // ══ DRAG LIBRE MEJORADO CON LÍMITES ══
@@ -252,7 +242,6 @@ const onMouseMove = (e) => {
   e.preventDefault()
   const diff = e.clientX - dragStartX.value
   let newOffset = dragStartOffset.value + diff
-  // Limitar durante el arrastre usando los bounds con epsilon
   const bounds = getBounds()
   newOffset = Math.min(bounds.min, Math.max(bounds.max, newOffset))
   liveOffset.value = newOffset
@@ -264,7 +253,6 @@ const onMouseUp = (e) => {
   const diff = dragStartX.value - e.clientX
   if (Math.abs(diff) > dragThreshold) {
     const step = planCardWidth.value + planGap.value
-    // Usar liveOffset que ya está limitado
     const rawIndex = -liveOffset.value / step + 0.5
     const clamped = Math.max(0, Math.min(plans.length - 1, Math.round(rawIndex)))
     currentPlanIndex.value = clamped
@@ -317,6 +305,17 @@ onMounted(() => {
   window.addEventListener('resize', updateScreenWidth)
   updateScreenWidth()
   cart.loadFromStorage()
+
+  // ResizeObserver para recalcular cuando el viewport cambie de tamaño real
+  if (planViewport.value) {
+    const ro = new ResizeObserver(() => { updateScreenWidth() })
+    ro.observe(planViewport.value)
+    setTimeout(() => ro.disconnect(), 2000)
+  }
+
+  setTimeout(() => { updateScreenWidth() }, 50)
+  setTimeout(() => { updateScreenWidth() }, 200)
+  setTimeout(() => { updateScreenWidth() }, 500)
 })
 onUnmounted(() => { window.removeEventListener('resize', updateScreenWidth) })
 
@@ -335,26 +334,13 @@ const planGap = computed(() => {
 
 const planTrackOffset = computed(() => {
   if (!planViewport.value) return 0
-
-  const rect = planViewport.value.getBoundingClientRect()
-  const vw = rect.width
-
+  const vw = planViewport.value.offsetWidth
   const cardW = planCardWidth.value
   const gap = planGap.value
   const step = cardW + gap
-
-  // Offset centrado ideal
   const baseOffset = (vw - cardW) / 2 - (currentPlanIndex.value * step)
-
-  const bounds = getBounds()
-
-  // Durante el arrastre, devolvemos liveOffset (ya limitado por onMouseMove/onTouchMove)
-  if (isDragging.value && liveOffset.value !== 0) {
-    return liveOffset.value
-  }
-
-  // Aplicamos límites al offset final
-  return Math.min(bounds.min, Math.max(bounds.max, baseOffset))
+  if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
+  return baseOffset
 })
 
 const prevPlan    = () => { if (currentPlanIndex.value > 0) currentPlanIndex.value-- }
@@ -387,92 +373,206 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 
 </script>
 
+
 <style scoped>
-.pricing { padding: 5rem 0; background: var(--bg-alt); transition: background 0.35s; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-.header { text-align: center; margin-bottom: 3.5rem; }
-.section-title { font-size: clamp(1.6rem, 3.5vw, 2.6rem); font-weight: 900; letter-spacing: -0.03em; color: var(--text); margin-bottom: 1.25rem; transition: color 0.35s; }
-.toggle { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; color: var(--text-muted); }
+.pricing {
+  padding: 5rem 0;
+  background: var(--bg-alt);
+  transition: background 0.35s;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  transition: color 0.35s;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
 .lbl { transition: color 0.2s; }
 .lbl--active { color: var(--text); font-weight: 700; }
 .save { color: var(--accent); font-style: normal; }
-.toggle-btn { width: 3rem; height: 1.5rem; background: var(--border-soft); border: 1px solid var(--border); border-radius: 9999px; padding: 0.15rem; cursor: pointer; display: flex; align-items: center; transition: background 0.35s; }
-.toggle-dot { width: 1.1rem; height: 1.1rem; background: var(--accent); border-radius: 9999px; transition: transform 0.25s ease; display: block; }
+
+.toggle-btn {
+  width: 3rem;
+  height: 1.5rem;
+  background: var(--border-soft);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.15rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.35s;
+}
+
+.toggle-dot {
+  width: 1.1rem;
+  height: 1.1rem;
+  background: var(--accent);
+  border-radius: 9999px;
+  transition: transform 0.25s ease;
+  display: block;
+}
+
 .toggle-dot--right { transform: translateX(1.4rem); }
 
-.carousel-container { display: flex; align-items: center; gap: 1rem; padding: 0 1rem; margin-bottom: 1rem; max-width: 1200px; width: 100%; margin-left: auto; margin-right: auto; }
-.carousel-viewport { flex: 1; overflow: hidden; border-radius: 1.5rem; min-height: 550px; display: flex; align-items: center; }
-.plans-track { display: flex; gap: v-bind(planGap + 'px'); transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); will-change: transform; align-items: center; height: 40rem; width: fit-content; }
-.storage-track { display: flex; gap: 32px; transition: transform 0.4s ease-in-out; will-change: transform; align-items: center; height: 20rem; width: fit-content; }
+.carousel-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  max-width: 1200px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-.carr-arrow { flex-shrink: 0; width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: var(--bg-card); border: 1.5px solid var(--border); color: var(--accent); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s, transform 0.15s, opacity 0.2s; z-index: 10; }
-.carr-arrow:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--accent-text); transform: scale(1.1); }
+.carousel-viewport {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  min-height: 550px;
+  display: flex;
+  align-items: center;
+}
+
+.plans-track {
+  display: flex;
+  gap: v-bind(planGap + 'px');
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+  align-items: center;
+  height: 40rem;
+  width: fit-content;
+}
+
+.storage-track {
+  display: flex;
+  gap: 32px;
+  transition: transform 0.4s ease-in-out;
+  will-change: transform;
+  align-items: center;
+  height: 20rem;
+  width: fit-content;
+}
+
+.carr-arrow {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  color: var(--accent);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s, opacity 0.2s;
+  z-index: 10;
+}
+
+.carr-arrow:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.1);
+}
+
 .carr-arrow:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
-.pagination-dots { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
 .page-indicator { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; min-width: 3rem; text-align: center; }
 .plan-name-indicator { font-size: 0.85rem; color: var(--text-muted); font-style: italic; min-width: 10rem; text-align: center; }
 .dots { display: flex; gap: 0.5rem; align-items: center; }
 .dot { width: 0.6rem; height: 0.6rem; border-radius: 9999px; background: var(--border); border: none; cursor: pointer; padding: 0; transition: background 0.2s, width 0.25s ease; }
 .dot--active { background: var(--accent); width: 1.5rem; }
 
-.plan-card { 
-  flex-shrink: 0; 
-  width: v-bind(planCardWidth + 'px'); 
-  background: var(--bg-card); 
-  border: 1px solid var(--border-soft); 
-  border-radius: 1.5rem; 
-  padding: 1rem; 
-  position: relative; 
-  cursor: pointer; 
-  min-height: 600px; 
-  display: flex; 
-  flex-direction: column; 
-  justify-content: space-between; 
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, background 0.35s; 
-}
-@media (max-width: 768px) { 
-  .plan-card { width: 270px; min-height: 580px; } 
-}
-@media (max-width: 480px) { 
-  .plan-card { width: 260px; min-height: 560px; } 
-}
-@media (max-width: 360px) { 
-  .plan-card { width: 240px; min-height: 540px; } 
-}
-.plan-card--centered { 
-  border: 2px solid var(--accent); 
-  box-shadow: 0 0 0 2px var(--accent), 0 12px 40px var(--accent-glow); 
-  transform: scale(1.02); 
-  z-index: 2; 
-}
-.plan-card.featured { 
-  border: 2px solid var(--accent); 
-  background: linear-gradient(145deg, var(--bg-card), var(--bg-alt)); 
-  box-shadow: 0 0 28px var(--accent-glow); 
-}
-.plan-card--centered.featured { 
-  box-shadow: 0 0 0 2px var(--accent), 0 12px 40px var(--accent-glow); 
+.plan-card {
+  flex-shrink: 0;
+  width: v-bind(planCardWidth + 'px');
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 1.5rem;
+  padding: 1rem;
+  position: relative;
+  cursor: pointer;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, background 0.35s;
 }
 
-.badge { 
-  position: absolute; 
-  top: -12px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  background: var(--accent); 
-  color: var(--accent-text); 
-  font-size: 0.7rem; 
-  font-weight: 700; 
-  padding: 0.25rem 1rem; 
-  border-radius: 9999px; 
-  white-space: nowrap; 
-  letter-spacing: 0.5px; 
-  display: flex; 
-  align-items: center; 
-  gap: 0.25rem; 
-  z-index: 3; 
+@media (max-width: 768px) { .plan-card { width: 270px; min-height: 580px; } }
+@media (max-width: 480px) { .plan-card { width: 260px; min-height: 560px; } }
+@media (max-width: 360px) { .plan-card { width: 240px; min-height: 540px; } }
+
+.plan-card--centered {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 12px 40px var(--accent-glow);
+  transform: scale(1.02);
+  z-index: 2;
 }
+
+.plan-card.featured {
+  border: 2px solid var(--accent);
+  background: linear-gradient(145deg, var(--bg-card), var(--bg-alt));
+  box-shadow: 0 0 28px var(--accent-glow);
+}
+
+.plan-card--centered.featured { box-shadow: 0 0 0 2px var(--accent), 0 12px 40px var(--accent-glow); }
+
+.badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  z-index: 3;
+}
+
 .badge i { font-size: 0.6rem; }
 .plan-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; display: inline-block; align-self: center; }
 .plan-name { font-size: 1.35rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.02em; transition: color 0.35s; line-height: 1.3; text-align: center; }
@@ -510,12 +610,45 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 .storage-subtitle { color: var(--text-muted); font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: color 0.35s; }
 .storage-subtitle i { color: var(--accent); }
 
-.storage-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 1.2rem; position: relative; cursor: pointer; height: auto; min-height: 260px; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 0.85rem; text-align: center; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.35s; }
+.storage-card {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 1.2rem;
+  position: relative;
+  cursor: pointer;
+  height: auto;
+  min-height: 260px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.35s;
+}
+
 @media (max-width: 768px) { .storage-card { padding: 1.5rem 1rem; min-height: 240px; } }
 @media (max-width: 480px) { .storage-card { padding: 1.25rem; min-height: 220px; } }
 @media (max-width: 360px) { .storage-card { padding: 1rem 0.75rem; min-height: 200px; } }
-.storage-cards-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 0 1.5rem; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
-@media (max-width: 480px) { .storage-cards-wrap { grid-template-columns: 1fr; } .storage-cards-wrap .storage-card { width: 80%; margin: 0 auto; } }
+
+.storage-cards-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 0 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 480px) {
+  .storage-cards-wrap { grid-template-columns: 1fr; }
+  .storage-cards-wrap .storage-card { width: 80%; margin: 0 auto; }
+}
+
 .storage-card--variable { min-height: 320px; height: auto; }
 .storage-note { font-size: 0.72rem; color: var(--text-muted); margin-top: -0.25rem; }
 .input-wrap { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.25rem; }
@@ -543,6 +676,7 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
   .pagination-dots { gap: 1rem; }
   .plan-name-indicator { min-width: 8rem; }
 }
+
 @media (max-width: 480px) {
   .carousel-viewport { min-height: 480px; }
   .storage-price { font-size: 1.2rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; }
@@ -553,6 +687,7 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
   .plan-name-indicator { min-width: 6rem; font-size: 0.75rem; }
   .carr-arrow { width: 2rem; height: 2rem; font-size: 0.8rem; }
 }
+
 @media (max-width: 360px) {
   .carousel-viewport { min-height: 460px; }
   .plans-track { gap: 12px; }

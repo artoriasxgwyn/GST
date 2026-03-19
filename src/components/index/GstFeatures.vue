@@ -68,6 +68,11 @@ const features = [
   }
 }
 
+@media (max-width: 600px) {
+ .section-title {
+  text-align: center;
+}
+}
 .section-title {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 900;
