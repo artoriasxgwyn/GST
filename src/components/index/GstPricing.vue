@@ -25,7 +25,7 @@
 
     <!-- ══ CARRUSEL PLANES ══ -->
     <div class="carousel-container">
-      <button class="carr-arrow carr-arrow--left" @click="prevPlan" :disabled="currentPlanIndex === 0"
+      <button class="carr-arrow carr-arrow--left" @click="prevPlan" :disabled="false"
         aria-label="Anterior">
         <i class="bi bi-chevron-left"></i>
       </button>
@@ -34,11 +34,11 @@
         @touchmove.passive="onTouchMove" @touchend="onTouchEnd" :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
         <div class="plans-track"
           :style="{ transform: `translateX(${planTrackOffset}px)`, transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)' }">
-          <div v-for="(plan, i) in plans" :key="plan.name" class="plan-card"
-            :class="{ featured: plan.featured, 'plan-card--centered': i === currentPlanIndex, 'plan-card--selected': selectedPlanIndex === i }"
-            @click="selectPlan(i)">
+          <div v-for="(plan, i) in infinitePlans" :key="i" class="plan-card"
+            :class="{ featured: plan.featured, 'plan-card--centered': i - plans.length === currentPlanIndex, 'plan-card--selected': selectedPlanIndex === (i - plans.length) }"
+            @click="selectPlan(i - plans.length)">
             <!-- Badge solo en la última card -->
-            <div v-if="i === plans.length - 1" class="badge">
+            <div v-if="(i - plans.length) === plans.length - 1" class="badge">
               <i class="bi bi-star-fill"></i> Recomendado
             </div>
             <i :class="['bi', plan.icon, 'plan-icon']"></i>
@@ -65,7 +65,7 @@
           </div>
         </div>
       </div>
-      <button class="carr-arrow carr-arrow--right" @click="nextPlan" :disabled="currentPlanIndex === plans.length - 1"
+      <button class="carr-arrow carr-arrow--right" @click="nextPlan" :disabled="false"
         aria-label="Siguiente">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -162,8 +162,10 @@ const showToast = (msg) => {
 }
 
 const selectPlan = (i) => {
-  selectedPlanIndex.value = selectedPlanIndex.value === i ? null : i
-  if (selectedPlanIndex.value !== null) goToPlan(i)
+  // i aquí es el índice dentro de infinitePlans, convertir a lógico
+  const logical = ((i % plans.length) + plans.length) % plans.length
+  selectedPlanIndex.value = selectedPlanIndex.value === logical ? null : logical
+  if (selectedPlanIndex.value !== null) goToPlan(logical)
 }
 
 const selectStorage = (i) => {
@@ -203,24 +205,13 @@ const annual = ref(false)
 const annualPrice = (p) => (p * 0.8).toFixed(2)
 
 const planViewport    = ref(null)
-const currentPlanIndex    = ref(0)
+const currentPlanIndex = computed(() => ((virtualIndex.value % plans.length) + plans.length) % plans.length)
 
 const screenWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
 const updateScreenWidth = () => { screenWidth.value = window.innerWidth }
 
-// ══ LÍMITES CON MARGEN DE SEGURIDAD PARA XIAOMI ══
-const getBounds = () => {
-  if (!planViewport.value) return { min: 0, max: 0 }
-  const rect = planViewport.value.getBoundingClientRect()
-  const vw = rect.width
-  const cardW = planCardWidth.value
-  const gap = planGap.value
-  const totalTrackWidth = cardW * plans.length + gap * (plans.length - 1)
-  const minOffset = (vw - cardW) / 2
-  let maxOffset = vw - totalTrackWidth - (vw - cardW) / 2
-  const EPSILON = 1.5
-  return { min: minOffset, max: maxOffset - EPSILON }
-}
+// ══ CARRUSEL INFINITO — SIN LÍMITES ══
+// Ya no necesitamos getBounds porque el carrusel es infinito
 
 // ══ DRAG LIBRE MEJORADO CON LÍMITES ══
 const isDragging = ref(false)
@@ -228,6 +219,10 @@ const dragStartX = ref(0)
 const dragStartOffset = ref(0)
 const liveOffset = ref(0)
 const dragThreshold = 5
+
+// Carrusel infinito: índice virtual sin límites
+const virtualIndex = ref(0)  // crece o decrece sin límite
+const infinitePlans = computed(() => [...plans, ...plans, ...plans])
 
 const onMouseDown = (e) => {
   e.preventDefault()
@@ -241,10 +236,7 @@ const onMouseMove = (e) => {
   if (!isDragging.value) return
   e.preventDefault()
   const diff = e.clientX - dragStartX.value
-  let newOffset = dragStartOffset.value + diff
-  const bounds = getBounds()
-  newOffset = Math.min(bounds.min, Math.max(bounds.max, newOffset))
-  liveOffset.value = newOffset
+  liveOffset.value = dragStartOffset.value + diff
 }
 
 const onMouseUp = (e) => {
@@ -253,9 +245,11 @@ const onMouseUp = (e) => {
   const diff = dragStartX.value - e.clientX
   if (Math.abs(diff) > dragThreshold) {
     const step = planCardWidth.value + planGap.value
-    const rawIndex = -liveOffset.value / step + 0.5
-    const clamped = Math.max(0, Math.min(plans.length - 1, Math.round(rawIndex)))
-    currentPlanIndex.value = clamped
+    const vw = planViewport.value.offsetWidth
+    const centerOffset = (vw - planCardWidth.value) / 2
+    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+    virtualIndex.value = Math.round(rawVirtual)
+    requestAnimationFrame(() => requestAnimationFrame(normalize))
   }
   liveOffset.value = 0
 }
@@ -264,9 +258,11 @@ const onMouseLeave = () => {
   if (isDragging.value) {
     isDragging.value = false
     const step = planCardWidth.value + planGap.value
-    const rawIndex = -liveOffset.value / step + 0.5
-    const clamped = Math.max(0, Math.min(plans.length - 1, Math.round(rawIndex)))
-    currentPlanIndex.value = clamped
+    const vw = planViewport.value.offsetWidth
+    const centerOffset = (vw - planCardWidth.value) / 2
+    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+    virtualIndex.value = Math.round(rawVirtual)
+    requestAnimationFrame(() => requestAnimationFrame(normalize))
     liveOffset.value = 0
   }
 }
@@ -282,10 +278,7 @@ const onTouchStart = (e) => {
 const onTouchMove = (e) => {
   if (!isDragging.value) return
   const diff = e.touches[0].clientX - dragStartX.value
-  let newOffset = dragStartOffset.value + diff
-  const bounds = getBounds()
-  newOffset = Math.min(bounds.min, Math.max(bounds.max, newOffset))
-  liveOffset.value = newOffset
+  liveOffset.value = dragStartOffset.value + diff
 }
 
 const onTouchEnd = (e) => {
@@ -294,9 +287,11 @@ const onTouchEnd = (e) => {
   const diff = dragStartX.value - e.changedTouches[0].clientX
   if (Math.abs(diff) > dragThreshold) {
     const step = planCardWidth.value + planGap.value
-    const rawIndex = -liveOffset.value / step + 0.5
-    const clamped = Math.max(0, Math.min(plans.length - 1, Math.round(rawIndex)))
-    currentPlanIndex.value = clamped
+    const vw = planViewport.value.offsetWidth
+    const centerOffset = (vw - planCardWidth.value) / 2
+    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+    virtualIndex.value = Math.round(rawVirtual)
+    requestAnimationFrame(() => requestAnimationFrame(normalize))
   }
   liveOffset.value = 0
 }
@@ -338,14 +333,38 @@ const planTrackOffset = computed(() => {
   const cardW = planCardWidth.value
   const gap = planGap.value
   const step = cardW + gap
-  const baseOffset = (vw - cardW) / 2 - (currentPlanIndex.value * step)
+  // virtualIndex crece sin límite — el track se mueve continuamente sin saltos
+  const realIndex = virtualIndex.value + plans.length
+  const baseOffset = (vw - cardW) / 2 - (realIndex * step)
   if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
   return baseOffset
 })
 
-const prevPlan    = () => { if (currentPlanIndex.value > 0) currentPlanIndex.value-- }
-const nextPlan    = () => { if (currentPlanIndex.value < plans.length - 1) currentPlanIndex.value++ }
-const goToPlan    = (i) => { currentPlanIndex.value = i }
+// Normaliza virtualIndex al bloque del medio sin animación
+// El carrusel es infinito: cuando llegamos al borde de una copia,
+// saltamos silenciosamente a la misma posición visual en otra copia
+const normalize = () => {
+  const len = plans.length
+  // Mantener virtualIndex siempre en el rango [-len/2, len/2] para evitar números grandes
+  if (virtualIndex.value >= len) {
+    virtualIndex.value -= len
+  } else if (virtualIndex.value < 0) {
+    virtualIndex.value += len
+  }
+}
+
+const prevPlan = () => {
+  virtualIndex.value--
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+}
+const nextPlan = () => {
+  virtualIndex.value++
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+}
+const goToPlan = (i) => {
+  virtualIndex.value = i
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+}
 
 const plans = [
   { name: 'Plan Basic – Integral', icon: 'bi-gift',           price: '$5',   rawPrice: 5, features: ['2 usuarios', '5 GB almacenamiento', 'Todas las funciones activas', 'Soporte básico'],        ideal: 'Ideal para talleres pequeños que están empezando.', featured: false },

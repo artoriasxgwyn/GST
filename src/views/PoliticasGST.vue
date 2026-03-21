@@ -4,7 +4,7 @@
       <div class="container">
 
         <!-- Header -->
-        <div class="policy-header anim-item">
+        <div class="policy-header">
           <div class="badge">
             <i class="bi bi-shield-lock-fill"></i>
             Privacidad & Confidencialidad
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Intro -->
-        <div class="intro-card anim-item">
+        <div class="intro-card">
           <p>
             El sistema <strong>GST – Gestión Servicio Técnico</strong> es una plataforma tecnológica
             desarrollada y operada por <strong>OPERACION SISTEMICA SAS</strong>, identificada con
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Footer note -->
-        <div class="policy-footer anim-item">
+        <div class="policy-footer">
           <i class="bi bi-building"></i>
           <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019-2026 GST. Todos los derechos reservados.</span>
         </div>
@@ -169,24 +169,6 @@ onMounted(() => {
         }, 300)
       }
     }
-
-    // Header e intro animados inmediatamente al montar
-    document.querySelectorAll('.anim-item').forEach((el, i) => {
-      setTimeout(() => el.classList.add('slide-in-left'), i * 200)
-    })
-
-    // Observer para section-card (fade-in) al 10%
-    const cards = document.querySelectorAll('.section-card')
-    const cardObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const index = [...cards].indexOf(entry.target)
-          entry.target.classList.add(index % 2 === 0 ? 'slide-in-left' : 'slide-in-right')
-          cardObserver.unobserve(entry.target)
-        }
-      })
-    }, { threshold: 0.1 })
-    cards.forEach(el => cardObserver.observe(el))
   })
 })
 </script>
@@ -299,7 +281,6 @@ onMounted(() => {
   border: 1px solid var(--border-soft);
   border-radius: 1.25rem;
   padding: 1.75rem;
-  opacity: 0;
   transition: background 0.35s, border-color 0.35s;
 }
 
@@ -400,45 +381,9 @@ onMounted(() => {
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-light);
   transition: color 0.35s, border-color 0.35s;
-  opacity: 0;
 }
 
 .policy-footer i { color: var(--accent); }
-
-/* ══ ANIMACIONES ══ */
-
-.anim-item { opacity: 0; }
-
-.slide-in-left, .slide-in-right {
-  opacity: 1 !important;
-  -webkit-animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-          animation: slide-in-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-}
-
-@-webkit-keyframes slide-in-top {
-  0% {
-    -webkit-transform: translateY(-1000px);
-            transform: translateY(-1000px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes slide-in-top {
-  0% {
-    -webkit-transform: translateY(-1000px);
-            transform: translateY(-1000px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 /* ══ RESPONSIVE ══ */
 @media (max-width: 640px) {
