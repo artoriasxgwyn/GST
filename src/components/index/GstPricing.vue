@@ -155,50 +155,50 @@ const toastMsg = ref('')
 let toastTimer = null
 
 const showToast = (msg) => {
-  toastMsg.value = msg
-  toast.value = true
-  if (toastTimer) clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => { toast.value = false }, 2500)
+toastMsg.value = msg
+toast.value = true
+if (toastTimer) clearTimeout(toastTimer)
+toastTimer = setTimeout(() => { toast.value = false }, 2500)
 }
 
 const selectPlan = (i) => {
-  // i aquí es el índice dentro de infinitePlans, convertir a lógico
-  const logical = ((i % plans.length) + plans.length) % plans.length
-  selectedPlanIndex.value = selectedPlanIndex.value === logical ? null : logical
-  if (selectedPlanIndex.value !== null) goToPlan(logical)
+// i aquí es el índice dentro de infinitePlans, convertir a lógico
+const logical = ((i % plans.length) + plans.length) % plans.length
+selectedPlanIndex.value = selectedPlanIndex.value === logical ? null : logical
+if (selectedPlanIndex.value !== null) goToPlan(logical)
 }
 
 const selectStorage = (i) => {
-  selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
+selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
 }
 
 const closeAll = (e) => {
-  if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
-    selectedPlanIndex.value    = null
-    selectedStorageIndex.value = null
-  }
+if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
+  selectedPlanIndex.value    = null
+  selectedStorageIndex.value = null
+}
 }
 
 const addPlanToCart = (plan) => {
-  const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
-  cart.setPlan({
-    name:     plan.name,
-    price,
-    rawPrice: plan.rawPrice,
-    icon:     plan.icon,
-    features: plan.features,
-    months:   1,
-  })
-  showToast(`${plan.name} agregado al carrito`)
+const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
+cart.setPlan({
+  name:     plan.name,
+  price,
+  rawPrice: plan.rawPrice,
+  icon:     plan.icon,
+  features: plan.features,
+  months:   1,
+})
+showToast(`${plan.name} agregado al carrito`)
 }
 
 const addStorageToCart = (size, price) => {
-  if (!cart.plan) {
-    showToast('Primero selecciona un plan GST')
-    return
-  }
-  cart.setStorage({ size, price, months: 1 })
-  showToast(`Almacenamiento ${size} TB agregado al carrito`)
+if (!cart.plan) {
+  showToast('Primero selecciona un plan GST')
+  return
+}
+cart.setStorage({ size, price, months: 1 })
+showToast(`Almacenamiento ${size} TB agregado al carrito`)
 }
 
 const annual = ref(false)
@@ -225,166 +225,166 @@ const virtualIndex = ref(0)  // crece o decrece sin límite
 const infinitePlans = computed(() => [...plans, ...plans, ...plans])
 
 const onMouseDown = (e) => {
-  e.preventDefault()
-  isDragging.value = true
-  dragStartX.value = e.clientX
-  dragStartOffset.value = planTrackOffset.value
-  liveOffset.value = planTrackOffset.value
+e.preventDefault()
+isDragging.value = true
+dragStartX.value = e.clientX
+dragStartOffset.value = planTrackOffset.value
+liveOffset.value = planTrackOffset.value
 }
 
 const onMouseMove = (e) => {
-  if (!isDragging.value) return
-  e.preventDefault()
-  const diff = e.clientX - dragStartX.value
-  liveOffset.value = dragStartOffset.value + diff
+if (!isDragging.value) return
+e.preventDefault()
+const diff = e.clientX - dragStartX.value
+liveOffset.value = dragStartOffset.value + diff
 }
 
 const onMouseUp = (e) => {
-  if (!isDragging.value) return
-  isDragging.value = false
-  const diff = dragStartX.value - e.clientX
-  if (Math.abs(diff) > dragThreshold) {
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-  }
-  liveOffset.value = 0
+if (!isDragging.value) return
+isDragging.value = false
+const diff = dragStartX.value - e.clientX
+if (Math.abs(diff) > dragThreshold) {
+  const step = planCardWidth.value + planGap.value
+  const vw = planViewport.value.offsetWidth
+  const centerOffset = (vw - planCardWidth.value) / 2
+  const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+  virtualIndex.value = Math.round(rawVirtual)
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+}
+liveOffset.value = 0
 }
 
 const onMouseLeave = () => {
-  if (isDragging.value) {
-    isDragging.value = false
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-    liveOffset.value = 0
-  }
+if (isDragging.value) {
+  isDragging.value = false
+  const step = planCardWidth.value + planGap.value
+  const vw = planViewport.value.offsetWidth
+  const centerOffset = (vw - planCardWidth.value) / 2
+  const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+  virtualIndex.value = Math.round(rawVirtual)
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+  liveOffset.value = 0
+}
 }
 
 // ══ TOUCH ══
 const onTouchStart = (e) => {
-  isDragging.value = true
-  dragStartX.value = e.touches[0].clientX
-  dragStartOffset.value = planTrackOffset.value
-  liveOffset.value = planTrackOffset.value
+isDragging.value = true
+dragStartX.value = e.touches[0].clientX
+dragStartOffset.value = planTrackOffset.value
+liveOffset.value = planTrackOffset.value
 }
 
 const onTouchMove = (e) => {
-  if (!isDragging.value) return
-  const diff = e.touches[0].clientX - dragStartX.value
-  liveOffset.value = dragStartOffset.value + diff
+if (!isDragging.value) return
+const diff = e.touches[0].clientX - dragStartX.value
+liveOffset.value = dragStartOffset.value + diff
 }
 
 const onTouchEnd = (e) => {
-  if (!isDragging.value) return
-  isDragging.value = false
-  const diff = dragStartX.value - e.changedTouches[0].clientX
-  if (Math.abs(diff) > dragThreshold) {
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-  }
-  liveOffset.value = 0
+if (!isDragging.value) return
+isDragging.value = false
+const diff = dragStartX.value - e.changedTouches[0].clientX
+if (Math.abs(diff) > dragThreshold) {
+  const step = planCardWidth.value + planGap.value
+  const vw = planViewport.value.offsetWidth
+  const centerOffset = (vw - planCardWidth.value) / 2
+  const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
+  virtualIndex.value = Math.round(rawVirtual)
+  requestAnimationFrame(() => requestAnimationFrame(normalize))
+}
+liveOffset.value = 0
 }
 
 onMounted(() => {
-  window.addEventListener('resize', updateScreenWidth)
-  updateScreenWidth()
-  cart.loadFromStorage()
+window.addEventListener('resize', updateScreenWidth)
+updateScreenWidth()
+cart.loadFromStorage()
 
-  // ResizeObserver para recalcular cuando el viewport cambie de tamaño real
-  if (planViewport.value) {
-    const ro = new ResizeObserver(() => { updateScreenWidth() })
-    ro.observe(planViewport.value)
-    setTimeout(() => ro.disconnect(), 2000)
-  }
+// ResizeObserver para recalcular cuando el viewport cambie de tamaño real
+if (planViewport.value) {
+  const ro = new ResizeObserver(() => { updateScreenWidth() })
+  ro.observe(planViewport.value)
+  setTimeout(() => ro.disconnect(), 2000)
+}
 
-  setTimeout(() => { updateScreenWidth() }, 50)
-  setTimeout(() => { updateScreenWidth() }, 200)
-  setTimeout(() => { updateScreenWidth() }, 500)
+setTimeout(() => { updateScreenWidth() }, 50)
+setTimeout(() => { updateScreenWidth() }, 200)
+setTimeout(() => { updateScreenWidth() }, 500)
 })
 onUnmounted(() => { window.removeEventListener('resize', updateScreenWidth) })
 
 const planCardWidth = computed(() => {
-  if (screenWidth.value <= 360) return 240
-  if (screenWidth.value <= 480) return 260
-  if (screenWidth.value <= 768) return 270
-  return 290
+if (screenWidth.value <= 360) return 240
+if (screenWidth.value <= 480) return 260
+if (screenWidth.value <= 768) return 270
+return 290
 })
 
 const planGap = computed(() => {
-  if (screenWidth.value <= 480) return 16
-  if (screenWidth.value <= 768) return 20
-  return 32
+if (screenWidth.value <= 480) return 16
+if (screenWidth.value <= 768) return 20
+return 32
 })
 
 const planTrackOffset = computed(() => {
-  if (!planViewport.value) return 0
-  const vw = planViewport.value.offsetWidth
-  const cardW = planCardWidth.value
-  const gap = planGap.value
-  const step = cardW + gap
-  // virtualIndex crece sin límite — el track se mueve continuamente sin saltos
-  const realIndex = virtualIndex.value + plans.length
-  const baseOffset = (vw - cardW) / 2 - (realIndex * step)
-  if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
-  return baseOffset
+if (!planViewport.value) return 0
+const vw = planViewport.value.offsetWidth
+const cardW = planCardWidth.value
+const gap = planGap.value
+const step = cardW + gap
+// virtualIndex crece sin límite — el track se mueve continuamente sin saltos
+const realIndex = virtualIndex.value + plans.length
+const baseOffset = (vw - cardW) / 2 - (realIndex * step)
+if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
+return baseOffset
 })
 
 // Normaliza virtualIndex al bloque del medio sin animación
 // El carrusel es infinito: cuando llegamos al borde de una copia,
 // saltamos silenciosamente a la misma posición visual en otra copia
 const normalize = () => {
-  const len = plans.length
-  // Mantener virtualIndex siempre en el rango [-len/2, len/2] para evitar números grandes
-  if (virtualIndex.value >= len) {
-    virtualIndex.value -= len
-  } else if (virtualIndex.value < 0) {
-    virtualIndex.value += len
-  }
+const len = plans.length
+// Mantener virtualIndex siempre en el rango [-len/2, len/2] para evitar números grandes
+if (virtualIndex.value >= len) {
+  virtualIndex.value -= len
+} else if (virtualIndex.value < 0) {
+  virtualIndex.value += len
+}
 }
 
 const prevPlan = () => {
-  virtualIndex.value--
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
+virtualIndex.value--
+requestAnimationFrame(() => requestAnimationFrame(normalize))
 }
 const nextPlan = () => {
-  virtualIndex.value++
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
+virtualIndex.value++
+requestAnimationFrame(() => requestAnimationFrame(normalize))
 }
 const goToPlan = (i) => {
-  virtualIndex.value = i
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
+virtualIndex.value = i
+requestAnimationFrame(() => requestAnimationFrame(normalize))
 }
 
 const plans = [
-  { name: 'Plan Basic – Integral', icon: 'bi-gift',           price: '$5',   rawPrice: 5, features: ['2 usuarios', '5 GB almacenamiento', 'Todas las funciones activas', 'Soporte básico'],        ideal: 'Ideal para talleres pequeños que están empezando.', featured: false },
-  { name: 'Plan Start',            icon: 'bi-stars',          price: '$19',  rawPrice: 19,            features: ['Hasta 5 usuarios', '50 GB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para centros pequeños con flujo moderado.',   featured: false },
-  { name: 'Plan Growth',           icon: 'bi-graph-up-arrow', price: '$49',  rawPrice: 49,           features: ['Hasta 15 usuarios', '200 GB almacenamiento', 'Todas las funciones'],                        ideal: 'Ideal para centros medianos con varios técnicos.',  featured: false },
-  { name: 'Plan Business',         icon: 'bi-briefcase-fill', price: '$99',  rawPrice: 99,         features: ['Hasta 40 usuarios', '1 TB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para empresas con varias sedes.',             featured: false },
-  { name: 'Plan Enterprise',       icon: 'bi-building',       price: '$179', rawPrice: 179,       features: ['Hasta 100 usuarios', '2 TB almacenamiento', 'Todas las funciones', 'Soporte prioritario'], ideal: 'Ideal para redes grandes de servicio técnico.',     featured: true  },
+{ name: 'Plan Basic – Integral', icon: 'bi-gift',           price: '$5',   rawPrice: 5, features: ['2 usuarios', '5 GB almacenamiento', 'Todas las funciones activas', 'Soporte básico'],        ideal: 'Ideal para talleres pequeños que están empezando.', featured: false },
+{ name: 'Plan Start',            icon: 'bi-stars',          price: '$19',  rawPrice: 19,            features: ['Hasta 5 usuarios', '50 GB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para centros pequeños con flujo moderado.',   featured: false },
+{ name: 'Plan Growth',           icon: 'bi-graph-up-arrow', price: '$49',  rawPrice: 49,           features: ['Hasta 15 usuarios', '200 GB almacenamiento', 'Todas las funciones'],                        ideal: 'Ideal para centros medianos con varios técnicos.',  featured: false },
+{ name: 'Plan Business',         icon: 'bi-briefcase-fill', price: '$99',  rawPrice: 99,         features: ['Hasta 40 usuarios', '1 TB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para empresas con varias sedes.',             featured: false },
+{ name: 'Plan Enterprise',       icon: 'bi-building',       price: '$179', rawPrice: 179,       features: ['Hasta 100 usuarios', '2 TB almacenamiento', 'Todas las funciones', 'Soporte prioritario'], ideal: 'Ideal para redes grandes de servicio técnico.',     featured: true  },
 ]
 
 const allFeatures = [
-  { text: 'Gestión completa de agendas',                   icon: 'bi-calendar-check-fill'    },
-  { text: 'Creación y seguimiento de órdenes de servicio', icon: 'bi-clipboard2-check-fill'  },
-  { text: 'Gestión de garantías',                          icon: 'bi-shield-check'           },
-  { text: 'Carga de fotos y videos',                       icon: 'bi-camera-fill'            },
-  { text: 'Historial por cliente y por equipo',            icon: 'bi-clock-history'          },
-  { text: 'Reportes completos',                            icon: 'bi-bar-chart-fill'         },
-  { text: 'Panel administrativo',                          icon: 'bi-speedometer2'           },
-  { text: 'Multi-sucursal',                                icon: 'bi-buildings-fill'         },
-  { text: 'Control de técnicos',                           icon: 'bi-person-gear'            },
-  { text: 'Soporte estándar',                              icon: 'bi-headset'                },
+{ text: 'Gestión completa de agendas',                   icon: 'bi-calendar-check-fill'    },
+{ text: 'Creación y seguimiento de órdenes de servicio', icon: 'bi-clipboard2-check-fill'  },
+{ text: 'Gestión de garantías',                          icon: 'bi-shield-check'           },
+{ text: 'Carga de fotos y videos',                       icon: 'bi-camera-fill'            },
+{ text: 'Historial por cliente y por equipo',            icon: 'bi-clock-history'          },
+{ text: 'Reportes completos',                            icon: 'bi-bar-chart-fill'         },
+{ text: 'Panel administrativo',                          icon: 'bi-speedometer2'           },
+{ text: 'Multi-sucursal',                                icon: 'bi-buildings-fill'         },
+{ text: 'Control de técnicos',                           icon: 'bi-person-gear'            },
+{ text: 'Soporte estándar',                              icon: 'bi-headset'                },
 ]
 
 const inputTB    = ref(2)
@@ -395,20 +395,20 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 
 <style scoped>
 .pricing {
-  padding: 5rem 0;
-  background: var(--bg-alt);
-  transition: background 0.35s;
+padding: 5rem 0;
+background: var(--bg-alt);
+transition: background 0.35s;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1.5rem;
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 3.5rem;
+text-align: center;
+margin-bottom: 3.5rem;
 }
 
 .section-title {

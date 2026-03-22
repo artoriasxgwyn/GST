@@ -9,8 +9,8 @@
         </div>
 
         <h1 class="title">
-          Optimiza tu Servicio<br />
-          Técnico con <em>GST</em>
+          <span class="title-line">Optimiza tu Servicio</span>
+          <span class="title-line">Técnico con <em>GST</em></span>
         </h1>
 
         <p class="subtitle">
@@ -18,18 +18,28 @@
           y tomar el control total de tu taller o empresa.
         </p>
 
-        <div class="countdown">
+        <div class="countdown" role="timer" aria-label="Cuenta regresiva para lanzamiento">
           <div v-for="unit in countdown" :key="unit.label" class="countdown-unit">
-            <span class="countdown-num">{{ unit.value }}</span>
+            <span class="countdown-num" aria-live="off">{{ unit.value }}</span>
             <span class="countdown-label">{{ unit.label }}</span>
           </div>
         </div>
 
-        <p v-if="apiError" class="api-note">
-          <i class="bi bi-wifi-off"></i> Usando tiempo local
+        <p v-if="apiError" class="api-note" role="alert">
+          <i class="bi bi-wifi-off" aria-hidden="true"></i>
+          Usando tiempo local
         </p>
 
-        <button class="btn-primary">Solicitar Acceso Anticipado</button>
+        <div class="cta-group">
+          <button class="btn btn-primary btn-lg" @click="scrollToPricing">
+            <i class="bi bi-rocket-takeoff-fill" aria-hidden="true"></i>
+            Solicitar Acceso Anticipado
+          </button>
+          <p class="cta-note">
+            <i class="bi bi-shield-check" aria-hidden="true"></i>
+            Sin tarjeta de crédito requerida
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -41,7 +51,14 @@ import { ref, onMounted, onUnmounted, defineProps, computed } from 'vue'
 import bgBlue from '@/assets/backgroundBlue.jpg'
 import bgGreen from '@/assets/backgroundGreen.jpg'
 
-const props = defineProps({ darkMode: Boolean })
+const props = defineProps({
+  darkMode: Boolean,
+  toggleForm: Function
+})
+
+const scrollToPricing = () => {
+  document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const heroBg = computed(() => `url(${props.darkMode ? bgGreen : bgBlue})`)
 
