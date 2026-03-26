@@ -29,7 +29,7 @@
           <i class="bi bi-wifi-off"></i> Usando tiempo local
         </p>
 
-        <button class="btn-primary hero-fade-in-up">
+        <button class="btn-primary hero-fade-in-up" @click="scrollToPricing">
           <span>Solicitar Acceso Anticipado</span>
           <i class="bi bi-arrow-right btn-arrow"></i>
         </button>

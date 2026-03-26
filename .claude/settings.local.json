@@ -5,7 +5,8 @@
       "Skill(update-config)",
       "WebFetch(domain:github.com)",
       "Read(//c/Users/ryomen/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/**)",
-      "Bash(python scripts/search.py \"technical services SaaS platform spanish professional management\" --design-system -p \"GST Landing\")"
+      "Bash(python scripts/search.py \"technical services SaaS platform spanish professional management\" --design-system -p \"GST Landing\")",
+      "Bash(git checkout:*)"
     ]
   }
 }
