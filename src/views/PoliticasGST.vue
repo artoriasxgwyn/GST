@@ -4,7 +4,7 @@
       <div class="container">
 
         <!-- Header -->
-        <div class="policy-header">
+        <div class="policy-header anim-item">
           <div class="badge">
             <i class="bi bi-shield-lock-fill"></i>
             Privacidad & Confidencialidad
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Intro -->
-        <div class="intro-card">
+        <div class="intro-card anim-item">
           <p>
             El sistema <strong>GST – Gestión Servicio Técnico</strong> es una plataforma tecnológica
             desarrollada y operada por <strong>OPERACION SISTEMICA SAS</strong>, identificada con
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Footer note -->
-        <div class="policy-footer">
+        <div class="policy-footer anim-item">
           <i class="bi bi-building"></i>
           <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019-2026 GST. Todos los derechos reservados.</span>
         </div>
@@ -148,25 +148,22 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, nextTick } from 'vue'
+import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
+// Scroll to hash on mount
+import { onMounted, nextTick } from 'vue'
 onMounted(() => {
   nextTick(() => {
-    // Scroll to hash
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        setTimeout(() => {
-          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-        }, 300)
+        el.scrollIntoView({ block: 'start' })
       }
     }
   })
@@ -401,5 +398,18 @@ onMounted(() => {
   .intro-card { padding: 1.25rem; text-align: center; }
   .features-grid { gap: 0.4rem; justify-content: center; }
   .feature-pill { font-size: 0.76rem; }
+}
+
+/* ══ PANTALLAS GRANDES ══ */
+@media (min-width: 1400px) {
+  .container { max-width: 1100px; }
+}
+
+@media (min-width: 1920px) {
+  .container { max-width: 1300px; }
+}
+
+@media (min-width: 2560px) {
+  .container { max-width: 1600px; }
 }
 </style>

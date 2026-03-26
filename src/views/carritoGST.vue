@@ -129,10 +129,9 @@
               Serás redirigido a WhatsApp para confirmar tu pedido con nuestro equipo.
             </p>
 
-            <a :href="`https://api.whatsapp.com/send/?phone=573015739461&text=${cart.whatsappMessage}&type=phone_number`"
-              target="_blank" class="btn-checkout">
+            <button @click="sendToWhatsapp" class="btn-checkout">
               <i class="bi bi-whatsapp"></i> Solicitar por WhatsApp
-            </a>
+            </button>
 
             <button class="btn-clear" @click="cart.clearCart()">
               <i class="bi bi-trash3"></i> Vaciar carrito
@@ -163,6 +162,12 @@ const goToPlans = () => {
       document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })
     }, 100)
   })
+}
+
+const sendToWhatsapp = () => {
+  const url = `https://api.whatsapp.com/send/?phone=573015739461&text=${cart.whatsappMessage}&type=phone_number`
+  cart.clearCart()
+  window.open(url, '_blank')
 }
 
 onMounted(() => {
@@ -569,7 +574,6 @@ onMounted(() => {
 }
 
 .btn-checkout:hover {
-  transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
 }
 
@@ -613,7 +617,6 @@ onMounted(() => {
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
   box-shadow: 0 0 28px var(--accent-glow);
 }
 
@@ -624,5 +627,15 @@ onMounted(() => {
   .cart-card { padding: 1.25rem; }
   .months-row { gap: 0.75rem; }
   .cart-title { font-size: clamp(1.5rem, 7vw, 1.8rem); }
+}
+
+/* ══ PANTALLAS GRANDES ══ */
+@media (min-width: 2560px) {
+  .container { max-width: 1400px; }
+  .cart-title { font-size: 3.5rem; }
+  .cart-card-name { font-size: 1.3rem; }
+  .cart-card-price { font-size: 1.8rem; }
+  .summary-card { padding: 2rem; }
+  .total-price { font-size: 2.2rem; }
 }
 </style>

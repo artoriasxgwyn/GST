@@ -3,33 +3,36 @@
     <div class="glow"></div>
     <div class="container">
       <div class="content-col">
-        <div class="badge">
+        <div class="badge hero-fade-in">
           <i class="bi bi-rocket-takeoff-fill"></i>
           Lanzamiento Oficial: 25 de Mayo, 2026
         </div>
 
-        <h1 class="title">
+        <h1 class="title hero-fade-in-up">
           Optimiza tu Servicio<br />
           Técnico con <em>GST</em>
         </h1>
 
-        <p class="subtitle">
+        <p class="subtitle hero-fade-in-up">
           El sistema de gestión digital definitivo para centralizar tu información
           y tomar el control total de tu taller o empresa.
         </p>
 
-        <div class="countdown">
-          <div v-for="unit in countdown" :key="unit.label" class="countdown-unit">
+        <div class="countdown hero-fade-in-up">
+          <div v-for="(unit, i) in countdown" :key="unit.label" class="countdown-unit" :style="{ transitionDelay: `${i * 50}ms` }">
             <span class="countdown-num">{{ unit.value }}</span>
             <span class="countdown-label">{{ unit.label }}</span>
           </div>
         </div>
 
-        <p v-if="apiError" class="api-note">
+        <p v-if="apiError" class="api-note hero-fade-in-up">
           <i class="bi bi-wifi-off"></i> Usando tiempo local
         </p>
 
-        <button class="btn-primary">Solicitar Acceso Anticipado</button>
+        <button class="btn-primary hero-fade-in-up">
+          <span>Solicitar Acceso Anticipado</span>
+          <i class="bi bi-arrow-right btn-arrow"></i>
+        </button>
       </div>
     </div>
   </section>
@@ -85,6 +88,33 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES DE ENTRADA ══ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
 .hero {
   position: relative;
   overflow: hidden;
@@ -97,12 +127,28 @@ onUnmounted(() => {
   transition: background-image 0.35s ease;
 }
 
+/* Animaciones de entrada */
+.hero-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.hero-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.badge.hero-fade-in { animation-delay: 0.1s; }
+.title.hero-fade-in-up { animation-delay: 0.2s; }
+.subtitle.hero-fade-in-up { animation-delay: 0.3s; }
+.countdown.hero-fade-in-up { animation-delay: 0.4s; }
+.api-note.hero-fade-in-up { animation-delay: 0.5s; }
+.btn-primary.hero-fade-in-up { animation-delay: 0.6s; }
+
 @media (max-width:768px) {
   .hero {
     height: 25rem;
   }
 }
-
 
 @media (min-width:769px) and (max-width:1024px) {
   .hero {
@@ -246,7 +292,28 @@ onUnmounted(() => {
   background: var(--border-soft);
   min-width: 3.5rem;
   text-align: center;
-  transition: background 0.35s, border-color 0.35s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-unit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.countdown-unit:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.countdown-unit:hover::after {
+  opacity: 1;
 }
 
 @media (max-width: 640px) {
@@ -265,11 +332,6 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-
-@media (max-width: 640px) {
-  
-}
-
 
 .countdown-label {
   display: block;
@@ -302,14 +364,44 @@ onUnmounted(() => {
   padding: 0.8rem 2rem;
   cursor: pointer;
   box-shadow: 0 0 18px var(--accent-glow);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  transform: translateX(100%);
 }
 
 .btn-primary:hover {
   background: var(--accent);
   color: var(--accent-text);
-  transform: translateY(-2px);
-  box-shadow: 0 0 32px var(--accent-glow);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 40px var(--accent-glow);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-arrow {
+  transition: transform 0.3s ease;
+}
+
+.btn-primary:hover .btn-arrow {
+  transform: translateX(4px);
 }
 
 @media (max-width: 640px) {
@@ -318,14 +410,148 @@ onUnmounted(() => {
     padding: 0.7rem 1.5rem;
   }
 }
-@media (max-width:600px) {
-  .content-col {
-   text-align: center;
-   display: flex;
-   align-items: center;
+
+/* ══ MÓVIL 600px — rediseño sin imagen ══ */
+@media (max-width: 600px) {
+  .hero {
+    height: auto !important;
+    background-image: none !important;
+    background: var(--bg) !important;
+    padding: 0;
   }
-  .hero{
-aspect-ratio: 13/9 !important;
+
+  .glow { display: none; }
+
+  .container {
+    position: relative;
+    inset: unset;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .content-col {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 1.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Línea accent decorativa arriba */
+  .content-col::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .badge {
+    align-self: center;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    margin: 0 auto 1.75rem;
+    max-width: 100%;
+  }
+
+  /* Countdown como pill horizontal unificada */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 1.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .countdown-unit {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 0.85rem 0.25rem;
+    border-right: 1px solid var(--border);
+    min-width: unset;
+  }
+
+  .countdown-unit:last-child { border-right: none; }
+
+  .countdown-num {
+    font-size: 1.75rem;
+  }
+
+  .countdown-label {
+    width: auto;
+    font-size: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .btn-primary {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 1rem;
+    padding: 0.9rem 1.5rem;
+    border-radius: 0.75rem;
+    margin-top: 0;
+  }
+}
+
+/* ══ PANTALLAS GRANDES 2560px ══ */
+@media (min-width: 2560px) {
+  .hero {
+    height: 55rem;
+  }
+
+  .title {
+    font-size: 5rem;
+  }
+
+  .subtitle {
+    font-size: 1.3rem;
+    max-width: 40rem;
+  }
+
+  .countdown-num {
+    font-size: 2.2rem;
+  }
+
+  .countdown-label {
+    font-size: 0.7rem;
+    width: 5rem;
+  }
+
+  .countdown-unit {
+    min-width: 4.5rem;
+    padding: 1rem 0.8rem;
+  }
+
+  .badge {
+    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .btn-primary {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
   }
 }
 </style>

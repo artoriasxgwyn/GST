@@ -2,15 +2,16 @@
   <section class="steps">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">¿Cómo funciona GST?</h2>
-        <p class="section-sub">Un flujo de trabajo optimizado en 7 pasos clave.</p>
+        <h2 class="section-title fade-in-section">¿Cómo funciona GST?</h2>
+        <p class="section-sub fade-in-section">Un flujo de trabajo optimizado en 7 pasos clave.</p>
       </div>
       <div class="grid">
         <div
           v-for="(step, i) in steps"
           :key="i"
-          class="step"
+          class="step fade-in-step"
           :class="{ 'step--cta': step.cta }"
+          :style="{ animationDelay: `${i * 80}ms` }"
         >
           <template v-if="!step.cta">
             <span class="step-num">0{{ i + 1 }}</span>
@@ -28,7 +29,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted } from 'vue';
 defineProps({ darkMode: Boolean })
 
 const steps = [
@@ -41,13 +42,64 @@ const steps = [
   { icon: 'bi-credit-card-fill',      title: 'Pago',          desc: 'Liquidación de comisiones y pagos a técnicos.' },
   { cta: true },
 ]
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-step').forEach(el => {
+    observer.observe(el)
+  })
+})
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES DE ENTRADA ══ */
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInStep {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .steps {
   padding: 3rem 0;
   background: var(--bg);
   transition: background 0.35s;
+}
+
+.fade-in-section,
+.fade-in-step {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeInSection 0.8s ease-out forwards;
+}
+
+.fade-in-step.animate-visible {
+  animation: fadeInStep 0.6s ease-out forwards;
 }
 
 /* Responsive para móvil (≤425px) */
@@ -174,10 +226,35 @@ const steps = [
   border-radius: 0.75rem;
   padding: 1.25rem;
   background: var(--bg-card);
-  transition: border-color 0.2s, transform 0.2s, background 0.35s;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.step:hover::before {
+  transform: scaleX(1);
+}
+
+.step:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 @media (min-width: 640px) {
@@ -187,9 +264,8 @@ const steps = [
   }
 }
 
-.step:hover { 
-  border-color: var(--accent); 
-  transform: translateY(-3px); 
+.step:hover {
+  border-color: var(--accent);
 }
 
 .step--cta {
@@ -234,6 +310,11 @@ const steps = [
   font-size: clamp(1.4rem, 4vw, 1.6rem);
   color: var(--accent);
   margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.step:hover .step-icon {
+  transform: scale(1.15) rotate(5deg);
 }
 
 @media (min-width: 640px) {
@@ -284,5 +365,19 @@ const steps = [
 .steps * {
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/* ══ PANTALLAS GRANDES 2560px ══ */
+@media (min-width: 2560px) {
+  .container { max-width: 1600px; }
+  .section-title { font-size: 3rem; }
+  .section-sub { font-size: 1.2rem; }
+  .step { padding: 2rem; }
+  .step-num { font-size: 2.8rem; }
+  .step-icon { font-size: 2rem; }
+  .step-title { font-size: 1.2rem; }
+  .step-desc { font-size: 1rem; }
+  .step--cta { min-height: 260px; }
+  .step-cta-text { font-size: 1.8rem; }
 }
 </style>

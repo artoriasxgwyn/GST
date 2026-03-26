@@ -33,4 +33,5 @@ main { width: 100%; overflow-x: hidden; display: flex; flex-direction: column; }
 main > section { width: 100%; padding-left: 1rem; padding-right: 1rem; box-sizing: border-box; }
 @media (min-width: 640px)  { main > section { padding-left: 1.5rem; padding-right: 1.5rem; } }
 @media (min-width: 1024px) { main > section { padding-left: 2rem; padding-right: 2rem; } }
+@media (min-width: 2560px) { main > section { padding-left: 3rem; padding-right: 3rem; } }
 </style>

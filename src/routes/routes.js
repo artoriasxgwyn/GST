@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 import index from "@/views/indexGST.vue";
-import politicasGST from "@/views/politicasGST.vue";
+import politicasGST from "@/views/PoliticasGST.vue";
 import terminosYCondiciones from "@/views/terminosYCondiciones.vue";
 import politicasReembolso from "@/views/politicasReembolsoGST.vue";
 import politicasGarantia from "@/views/politicasGarantiaGST.vue";

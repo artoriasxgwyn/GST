@@ -315,7 +315,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent); box-sha
 .char-count { font-size: 0.75rem; color: var(--text-muted); text-align: right; margin-top: -0.2rem; transition: color 0.35s; }
 
 .btn-submit { width: 100%; padding: 0.9rem; background: var(--accent); color: var(--accent-text); border: none; border-radius: 0.75rem; font-size: 1rem; font-weight: 700; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 0 18px var(--accent-glow); transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; margin-top: 0.5rem; }
-.btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 28px var(--accent-glow); }
+.btn-submit:hover:not(:disabled) { box-shadow: 0 0 28px var(--accent-glow); }
 .btn-submit:disabled { opacity: 0.75; cursor: not-allowed; }
 .spin { display: inline-block; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }

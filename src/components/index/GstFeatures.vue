@@ -4,9 +4,9 @@
       <div class="inner">
 
         <div class="text-col">
-          <h2 class="section-title">Funciones Profesionales Avanzadas</h2>
+          <h2 class="section-title fade-in-section">Funciones Profesionales Avanzadas</h2>
           <div class="feature-list">
-            <div v-for="feat in features" :key="feat.title" class="feature">
+            <div v-for="(feat, i) in features" :key="feat.title" class="feature fade-in-feature" :style="{ animationDelay: `${i * 100}ms` }">
               <div class="feature-icon">
                 <i :class="['bi', feat.icon]"></i>
               </div>
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="visual-col">
+        <div class="visual-col fade-in-section">
           <img :src="darkMode ? tecnicoVerde : tecnicoAzul" alt="tecnico" class="imgTecnico">
         </div>
 
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted } from 'vue';
 defineProps({ darkMode: Boolean })
 import tecnicoAzul from '@/assets/tecnicoAzul.png'
 import tecnicoVerde from '@/assets/tecnicoVerde.png'
@@ -37,13 +37,69 @@ const features = [
   { icon: 'bi-stopwatch-fill', title: 'Visualización de Tiempo Admin', desc: 'Calcula cuánto tiempo dedicas realmente a la gestión administrativa vs. técnica.' },
   { icon: 'bi-download', title: 'Exportación de Nómina', desc: 'Exporta en un clic los reportes para el pago de técnicos y personal.' },
 ]
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-feature').forEach(el => {
+    observer.observe(el)
+  })
+})
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES DE ENTRADA ══ */
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInFeature {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 .features {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
+}
+
+.fade-in-section,
+.fade-in-feature {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeInSection 0.8s ease-out forwards;
+}
+
+.fade-in-feature.animate-visible {
+  animation: fadeInFeature 0.6s ease-out forwards;
 }
 
 .container {
@@ -60,6 +116,14 @@ const features = [
 
 .imgTecnico {
   width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+}
+
+.imgTecnico:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 48px var(--accent-glow);
 }
 
 @media (min-width: 1024px) {
@@ -93,6 +157,14 @@ const features = [
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  background: var(--border-soft);
+  transform: translateX(8px);
 }
 
 .feature-icon {
@@ -107,7 +179,14 @@ const features = [
   justify-content: center;
   font-size: 1.35rem;
   color: var(--accent);
-  transition: background 0.35s, border-color 0.35s;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature:hover .feature-icon {
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
 .feature-title {
@@ -169,7 +248,6 @@ const features = [
   border-radius: 0.5rem;
   background: var(--border-soft);
   border: 1px solid var(--border);
-  animation: pulse 2.5s ease-in-out infinite;
   transition: background 0.35s;
 }
 
@@ -194,15 +272,14 @@ const features = [
   background: repeating-linear-gradient(90deg, transparent 0%, var(--border) 15%, transparent 30%);
 }
 
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
+/* ══ PANTALLAS GRANDES 2560px ══ */
+@media (min-width: 2560px) {
+  .container { max-width: 1600px; }
+  .section-title { font-size: 3rem; }
+  .feature-list { gap: 2.5rem; }
+  .feature-title { font-size: 1.2rem; }
+  .feature-desc { font-size: 1.1rem; }
+  .feature-icon { width: 4rem; height: 4rem; font-size: 1.6rem; }
+  .imgTecnico { max-width: 600px; }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="terms-header">
+      <div class="terms-header anim-item">
         <div class="badge">
           <i class="bi bi-file-earmark-text-fill"></i>
           Términos & Condiciones
@@ -153,7 +153,7 @@
       </div>
 
       <!-- Footer note -->
-      <div class="terms-footer">
+      <div class="terms-footer anim-item">
         <i class="bi bi-building"></i>
         <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019–2026 GST. Todos los derechos reservados.</span>
       </div>
@@ -163,24 +163,21 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, nextTick } from 'vue'
+import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
+import { onMounted, nextTick } from 'vue'
 onMounted(() => {
   nextTick(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        setTimeout(() => {
-          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-        }, 300)
+        el.scrollIntoView({ block: 'start' })
       }
     }
   })
@@ -386,5 +383,18 @@ onMounted(() => {
   .exclusion-list li i { position: absolute; left: 0; top: 0.2rem; }
   .terms-title { font-size: clamp(1.5rem, 7vw, 1.8rem); }
   .terms-intro { padding: 1rem; font-size: 0.88rem; }
+}
+
+/* ══ PANTALLAS GRANDES ══ */
+@media (min-width: 1400px) {
+  .container { max-width: 1100px; }
+}
+
+@media (min-width: 1920px) {
+  .container { max-width: 1300px; }
+}
+
+@media (min-width: 2560px) {
+  .container { max-width: 1600px; }
 }
 </style>

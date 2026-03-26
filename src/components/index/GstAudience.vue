@@ -1,9 +1,9 @@
 <template>
   <section class="audience">
     <div class="container">
-      <h2 class="section-title">¿Para quién es GST?</h2>
+      <h2 class="section-title fade-in-section">¿Para quién es GST?</h2>
       <div class="grid">
-        <div v-for="item in audience" :key="item.title" class="item">
+        <div v-for="(item, i) in audience" :key="item.title" class="item fade-in-item" :style="{ animationDelay: `${i * 150}ms` }">
           <div class="icon-wrap">
             <i :class="['bi', item.icon]"></i>
           </div>
@@ -15,21 +15,83 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted } from 'vue';
 defineProps({ darkMode: Boolean })
 const audience = [
   { icon: 'bi-tools',       title: 'Talleres'       },
   { icon: 'bi-person-gear', title: 'Independientes' },
   { icon: 'bi-headset',     title: 'Post-Venta'     },
 ]
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-item').forEach(el => {
+    observer.observe(el)
+  })
+})
 </script>
 
 <style scoped>
-.audience { 
-  padding: 3rem 0; /* Reducido en móvil */
-  background: var(--bg); 
-  text-align: center; 
-  transition: background 0.35s; 
+/* ══ ANIMACIONES DE ENTRADA ══ */
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.audience {
+  padding: 3rem 0;
+  background: var(--bg);
+  text-align: center;
+  transition: background 0.35s;
+}
+
+.fade-in-section,
+.fade-in-item {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeInSection 0.8s ease-out forwards;
+}
+
+.fade-in-item.animate-visible {
+  animation: scaleIn 0.6s ease-out forwards;
 }
 
 @media (min-width: 768px) {
@@ -88,17 +150,40 @@ const audience = [
 }
 
 .icon-wrap {
-  width: 4rem; /* Reducido en móvil */
-  height: 4rem; /* Reducido en móvil */
-  border-radius: 0.75rem; /* Reducido en móvil */
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.75rem;
   background: var(--border-soft);
   border: 1px solid var(--border);
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
-  font-size: 1.8rem; /* Reducido en móvil */
+  font-size: 1.8rem;
   color: var(--accent);
-  transition: background 0.35s, border-color 0.35s, transform 0.2s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.icon-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.item:hover .icon-wrap::after {
+  opacity: 1;
+}
+
+.item:hover .icon-wrap {
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 8px 24px var(--accent-glow);
+  border-color: var(--accent);
 }
 
 @media (min-width: 480px) {
@@ -116,11 +201,6 @@ const audience = [
     border-radius: 1rem;
     font-size: 2.2rem;
   }
-}
-
-.item:hover .icon-wrap { 
-  transform: translateY(-4px); 
-  background: var(--border); 
 }
 
 .label { 
@@ -153,5 +233,14 @@ const audience = [
 .audience * {
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/* ══ PANTALLAS GRANDES 2560px ══ */
+@media (min-width: 2560px) {
+  .container { max-width: 1000px; }
+  .section-title { font-size: 3rem; }
+  .icon-wrap { width: 6rem; height: 6rem; font-size: 2.5rem; border-radius: 1.2rem; }
+  .label { font-size: 1.3rem; }
+  .grid { gap: 2.5rem; }
 }
 </style>

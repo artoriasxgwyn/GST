@@ -23,26 +23,35 @@
       </div>
     </div>
 
-    <!-- ══ CARRUSEL PLANES ══ -->
+    <!-- ══ CARRUSEL PLANES (100% INFINITO) ══ -->
     <div class="carousel-container">
-      <button class="carr-arrow carr-arrow--left" @click="prevPlan" :disabled="false"
-        aria-label="Anterior">
+      <button class="carr-arrow carr-arrow--left" @click="prevPlan" aria-label="Anterior">
         <i class="bi bi-chevron-left"></i>
       </button>
-      <div class="carousel-viewport" ref="planViewport" @mousedown="onMouseDown" @mousemove="onMouseMove"
-        @mouseup="onMouseUp" @mouseleave="onMouseLeave" @touchstart.passive="onTouchStart"
-        @touchmove.passive="onTouchMove" @touchend="onTouchEnd" :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
+      
+      <div class="carousel-viewport" ref="planViewport" 
+        @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp" @mouseleave="onMouseLeave" 
+        @touchstart.passive="onTouchStart" @touchmove.passive="onTouchMove" @touchend="onTouchEnd" 
+        :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
+        
         <div class="plans-track"
-          :style="{ transform: `translateX(${planTrackOffset}px)`, transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)' }">
+          @transitionend.self="handleTransitionEnd"
+          :style="{ 
+            transform: `translateX(${planTrackOffset}px)`, 
+            transition: trackTransition 
+          }">
+          
           <div v-for="(plan, i) in infinitePlans" :key="i" class="plan-card"
-            :class="{ featured: plan.featured, 'plan-card--centered': i - plans.length === currentPlanIndex, 'plan-card--selected': selectedPlanIndex === (i - plans.length) }"
-            @click="selectPlan(i - plans.length)">
-            <!-- Badge solo en la última card -->
-            <div v-if="(i - plans.length) === plans.length - 1" class="badge">
-              <i class="bi bi-star-fill"></i> Recomendado
-            </div>
+            :class="{
+              featured: plan.featured,
+              'plan-card--centered': i === (virtualIndex + centerOffsetIndex),
+              'plan-card--selected': selectedPlanIndex === (i % plans.length)
+            }"
+            @click="selectPlan(i)">
+
             <i :class="['bi', plan.icon, 'plan-icon']"></i>
             <h3 class="plan-name">{{ plan.name }}</h3>
+            
             <div v-if="!annual" class="plan-price">
               {{ plan.price }} USD <span>/ mes</span>
             </div>
@@ -51,6 +60,7 @@
               <div class="plan-price">${{ annualPrice(plan.rawPrice) }} USD <span>/ mes</span></div>
               <span class="discount-tag"><i class="bi bi-tag-fill"></i> –20%</span>
             </div>
+            
             <ul class="plan-features">
               <li v-for="f in plan.features" :key="f">
                 <i class="bi bi-check-circle-fill check"></i> {{ f }}
@@ -65,8 +75,8 @@
           </div>
         </div>
       </div>
-      <button class="carr-arrow carr-arrow--right" @click="nextPlan" :disabled="false"
-        aria-label="Siguiente">
+      
+      <button class="carr-arrow carr-arrow--right" @click="nextPlan" aria-label="Siguiente">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
@@ -80,6 +90,7 @@
       <span class="plan-name-indicator">{{ plans[currentPlanIndex].name }}</span>
     </div>
 
+    <!-- ══ SECCIÓN FUNCIONALIDADES Y ALMACENAMIENTO ══ -->
     <div class="container">
       <div class="features-section">
         <h3 class="features-title">
@@ -106,19 +117,15 @@
 
     <!-- ══ CARDS ALMACENAMIENTO ══ -->
     <div class="storage-cards-wrap">
-
-      <!-- Card 1: 1 TB fijo -->
       <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 0 }"
         @click="selectStorage(0)">
         <i class="bi bi-hdd-stack-fill storage-icon"></i>
         <div class="storage-size">1 TB</div>
         <div class="storage-price">$11 USD <span>/ mes</span></div>
         <div class="storage-note">1,024 GB × $40 COP/GB</div>
-        <button class="btn-storage" @click.stop="addStorageToCart(1, 11)"><i class="bi bi-cart-check"></i> Agregar al
-          carrito</button>
+        <button class="btn-storage" @click.stop="addStorageToCart(1, 11)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
       </div>
 
-      <!-- Card 2: 2–5 TB variable con botones -->
       <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 1 }"
         @click="selectStorage(1)">
         <i class="bi bi-hdd-rack-fill storage-icon"></i>
@@ -130,10 +137,8 @@
           <span class="input-val">{{ inputTB }} TB</span>
           <button class="input-btn" @click="inputTB < 5 && inputTB++"><i class="bi bi-plus"></i></button>
         </div>
-        <button class="btn-storage" @click.stop="addStorageToCart(inputTB, inputPrice)"><i class="bi bi-cart-check"></i>
-          Agregar al carrito</button>
+        <button class="btn-storage" @click.stop="addStorageToCart(inputTB, inputPrice)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
       </div>
-
     </div>
   </section>
 </template>
@@ -161,16 +166,193 @@ const showToast = (msg) => {
   toastTimer = setTimeout(() => { toast.value = false }, 2500)
 }
 
-const selectPlan = (i) => {
-  // i aquí es el índice dentro de infinitePlans, convertir a lógico
-  const logical = ((i % plans.length) + plans.length) % plans.length
+const annual = ref(false)
+const annualPrice = (p) => (p * 0.8).toFixed(2)
+
+const plans = [
+  { name: 'Plan Basic – Integral', icon: 'bi-gift',             price: '$5',   rawPrice: 5,   features: ['2 usuarios', '5 GB almacenamiento', 'Todas las funciones activas', 'Soporte básico'],        ideal: 'Ideal para talleres pequeños que están empezando.', featured: false },
+  { name: 'Plan Start',            icon: 'bi-stars',            price: '$19',  rawPrice: 19,  features: ['Hasta 5 usuarios', '50 GB almacenamiento', 'Todas las funciones'],                           ideal: 'Ideal para centros pequeños con flujo moderado.',   featured: false },
+  { name: 'Plan Growth',           icon: 'bi-graph-up-arrow',   price: '$49',  rawPrice: 49,  features: ['Hasta 15 usuarios', '200 GB almacenamiento', 'Todas las funciones'],                         ideal: 'Ideal para centros medianos con varios técnicos.',  featured: false },
+  { name: 'Plan Business',         icon: 'bi-briefcase-fill',   price: '$99',  rawPrice: 99,  features: ['Hasta 40 usuarios', '1 TB almacenamiento', 'Todas las funciones'],                           ideal: 'Ideal para empresas con varias sedes.',             featured: false },
+  { name: 'Plan Enterprise',       icon: 'bi-building',         price: '$179', rawPrice: 179, features: ['Hasta 100 usuarios', '2 TB almacenamiento', 'Todas las funciones', 'Soporte prioritario'], ideal: 'Ideal para redes grandes de servicio técnico.',     featured: true  },
+]
+
+// ══ LÓGICA DE CINTA INFINITA 100% FLUIDA ══
+const MULTIPLIER = 15 // Gran buffer: 35 planes a la izquierda, 35 a la derecha. Imposible ver el límite.
+const centerOffsetIndex = Math.floor(MULTIPLIER / 2) * plans.length // Índice central exacto (35)
+const infinitePlans = computed(() => {
+  let arr = []
+  for (let i = 0; i < MULTIPLIER; i++) arr.push(...plans)
+  return arr
+})
+
+const planViewport = ref(null)
+const virtualIndex = ref(0) 
+const isTransitioning = ref(false)
+
+const currentPlanIndex = computed(() => ((virtualIndex.value % plans.length) + plans.length) % plans.length)
+
+// Teletransporte invisible SOLO cuando la cinta está completamente quieta
+const handleTransitionEnd = (e) => {
+  if (e.propertyName !== 'transform') return
+  if (!isTransitioning.value) return // Evitar gatillos dobles
+  
+  isTransitioning.value = false
+  
+  // Normalizar para mantenernos siempre en el bloque central de 5 tarjetas
+  const normalized = ((virtualIndex.value % plans.length) + plans.length) % plans.length
+  if (virtualIndex.value !== normalized) {
+    virtualIndex.value = normalized
+  }
+}
+
+const triggerNavigation = (delta) => {
+  virtualIndex.value += delta
+  isTransitioning.value = true
+}
+
+const prevPlan = () => triggerNavigation(-1)
+const nextPlan = () => triggerNavigation(1)
+
+const goToPlan = (logicalTarget) => {
+  const currentLogical = ((virtualIndex.value % plans.length) + plans.length) % plans.length
+  let diff = logicalTarget - currentLogical
+  if (diff > plans.length / 2) diff -= plans.length
+  if (diff < -plans.length / 2) diff += plans.length
+  if (diff !== 0) triggerNavigation(diff)
+}
+
+const selectPlan = (indexInArray) => {
+  const logical = indexInArray % plans.length
   selectedPlanIndex.value = selectedPlanIndex.value === logical ? null : logical
   if (selectedPlanIndex.value !== null) goToPlan(logical)
 }
 
-const selectStorage = (i) => {
-  selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
+// ══ RESPONSIVE & MEDIDAS ══
+const screenWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
+const viewportWidth = ref(0)
+
+const planCardWidth = computed(() => {
+  if (screenWidth.value <= 360) return 240
+  if (screenWidth.value <= 480) return 260
+  if (screenWidth.value <= 768) return 270
+  return 290
+})
+
+const planGap = computed(() => {
+  if (screenWidth.value <= 480) return 16
+  if (screenWidth.value <= 768) return 20
+  return 32
+})
+
+// ══ ARRASTRE SIN LÍMITES ══
+const isDragging = ref(false)
+const dragStartX = ref(0)
+const dragStartOffset = ref(0)
+const liveOffset = ref(0)
+const dragThreshold = 5
+
+const trackTransition = computed(() => {
+  if (isDragging.value) return 'none'
+  return isTransitioning.value ? 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)' : 'none'
+})
+
+const planTrackOffset = computed(() => {
+  if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
+  
+  const vw = viewportWidth.value || (planViewport.value ? planViewport.value.offsetWidth : window.innerWidth - 32)
+  const step = planCardWidth.value + planGap.value
+  const realIndex = virtualIndex.value + centerOffsetIndex
+  return (vw - planCardWidth.value) / 2 - (realIndex * step)
+})
+
+const startDrag = (clientX) => {
+  isDragging.value = true
+  isTransitioning.value = false 
+  
+  // Leer la matriz física exacta para evitar tirones si cortas la animación
+  const trackEl = planViewport.value?.querySelector('.plans-track')
+  if (trackEl) {
+    const style = window.getComputedStyle(trackEl)
+    try {
+      const matrix = new DOMMatrix(style.transform)
+      dragStartOffset.value = matrix.m41
+    } catch(e) {
+      dragStartOffset.value = planTrackOffset.value
+    }
+  } else {
+    dragStartOffset.value = planTrackOffset.value
+  }
+  
+  liveOffset.value = dragStartOffset.value
+  dragStartX.value = clientX
 }
+
+const moveDrag = (clientX) => {
+  if (!isDragging.value) return
+  liveOffset.value = dragStartOffset.value + (clientX - dragStartX.value)
+}
+
+const endDrag = (clientX) => {
+  if (!isDragging.value) return
+  isDragging.value = false
+  const diff = dragStartX.value - clientX
+  
+  if (Math.abs(diff) > dragThreshold) {
+    const step = planCardWidth.value + planGap.value
+    const vw = viewportWidth.value || (planViewport.value ? planViewport.value.offsetWidth : window.innerWidth - 32)
+    const centerOffsetPx = (vw - planCardWidth.value) / 2
+    
+    // Calcular el índice exacto en base a los píxeles reales arrastrados
+    const exactIndex = (centerOffsetPx - liveOffset.value) / step
+    virtualIndex.value = Math.round(exactIndex - centerOffsetIndex)
+    
+    liveOffset.value = 0 
+    isTransitioning.value = true
+  } else {
+    // Si fue solo un toque (click), soltar sin animar
+    liveOffset.value = 0
+  }
+}
+
+const onMouseDown = (e) => { e.preventDefault(); startDrag(e.clientX) }
+const onMouseMove = (e) => { e.preventDefault(); moveDrag(e.clientX) }
+const onMouseUp = (e) => endDrag(e.clientX)
+const onMouseLeave = () => isDragging.value && endDrag(dragStartX.value)
+
+const onTouchStart = (e) => startDrag(e.touches[0].clientX)
+const onTouchMove = (e) => moveDrag(e.touches[0].clientX)
+const onTouchEnd = (e) => endDrag(e.changedTouches[0].clientX)
+
+// ══ UTILIDADES Y CICLO DE VIDA ══
+const updateScreenWidth = () => {
+  screenWidth.value = window.innerWidth
+  updateViewportWidth()
+}
+
+const updateViewportWidth = () => {
+  if (planViewport.value) {
+    viewportWidth.value = planViewport.value.getBoundingClientRect().width || planViewport.value.offsetWidth || window.innerWidth - 32
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('resize', updateScreenWidth)
+  updateScreenWidth()
+  cart.loadFromStorage()
+
+  if (planViewport.value) {
+    const ro = new ResizeObserver(() => {
+      updateScreenWidth()
+      updateViewportWidth()
+    })
+    ro.observe(planViewport.value)
+    setTimeout(() => ro.disconnect(), 3000)
+  }
+  [50, 150, 300, 600, 1000].forEach(ms => setTimeout(updateViewportWidth, ms))
+})
+
+onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
 const closeAll = (e) => {
   if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
@@ -192,187 +374,13 @@ const addPlanToCart = (plan) => {
   showToast(`${plan.name} agregado al carrito`)
 }
 
+const selectStorage = (i) => selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
+
 const addStorageToCart = (size, price) => {
-  if (!cart.plan) {
-    showToast('Primero selecciona un plan GST')
-    return
-  }
+  if (!cart.plan) return showToast('Primero selecciona un plan GST')
   cart.setStorage({ size, price, months: 1 })
   showToast(`Almacenamiento ${size} TB agregado al carrito`)
 }
-
-const annual = ref(false)
-const annualPrice = (p) => (p * 0.8).toFixed(2)
-
-const planViewport    = ref(null)
-const currentPlanIndex = computed(() => ((virtualIndex.value % plans.length) + plans.length) % plans.length)
-
-const screenWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
-const updateScreenWidth = () => { screenWidth.value = window.innerWidth }
-
-// ══ CARRUSEL INFINITO — SIN LÍMITES ══
-// Ya no necesitamos getBounds porque el carrusel es infinito
-
-// ══ DRAG LIBRE MEJORADO CON LÍMITES ══
-const isDragging = ref(false)
-const dragStartX = ref(0)
-const dragStartOffset = ref(0)
-const liveOffset = ref(0)
-const dragThreshold = 5
-
-// Carrusel infinito: índice virtual sin límites
-const virtualIndex = ref(0)  // crece o decrece sin límite
-const infinitePlans = computed(() => [...plans, ...plans, ...plans])
-
-const onMouseDown = (e) => {
-  e.preventDefault()
-  isDragging.value = true
-  dragStartX.value = e.clientX
-  dragStartOffset.value = planTrackOffset.value
-  liveOffset.value = planTrackOffset.value
-}
-
-const onMouseMove = (e) => {
-  if (!isDragging.value) return
-  e.preventDefault()
-  const diff = e.clientX - dragStartX.value
-  liveOffset.value = dragStartOffset.value + diff
-}
-
-const onMouseUp = (e) => {
-  if (!isDragging.value) return
-  isDragging.value = false
-  const diff = dragStartX.value - e.clientX
-  if (Math.abs(diff) > dragThreshold) {
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-  }
-  liveOffset.value = 0
-}
-
-const onMouseLeave = () => {
-  if (isDragging.value) {
-    isDragging.value = false
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-    liveOffset.value = 0
-  }
-}
-
-// ══ TOUCH ══
-const onTouchStart = (e) => {
-  isDragging.value = true
-  dragStartX.value = e.touches[0].clientX
-  dragStartOffset.value = planTrackOffset.value
-  liveOffset.value = planTrackOffset.value
-}
-
-const onTouchMove = (e) => {
-  if (!isDragging.value) return
-  const diff = e.touches[0].clientX - dragStartX.value
-  liveOffset.value = dragStartOffset.value + diff
-}
-
-const onTouchEnd = (e) => {
-  if (!isDragging.value) return
-  isDragging.value = false
-  const diff = dragStartX.value - e.changedTouches[0].clientX
-  if (Math.abs(diff) > dragThreshold) {
-    const step = planCardWidth.value + planGap.value
-    const vw = planViewport.value.offsetWidth
-    const centerOffset = (vw - planCardWidth.value) / 2
-    const rawVirtual = (centerOffset - liveOffset.value) / step - plans.length
-    virtualIndex.value = Math.round(rawVirtual)
-    requestAnimationFrame(() => requestAnimationFrame(normalize))
-  }
-  liveOffset.value = 0
-}
-
-onMounted(() => {
-  window.addEventListener('resize', updateScreenWidth)
-  updateScreenWidth()
-  cart.loadFromStorage()
-
-  // ResizeObserver para recalcular cuando el viewport cambie de tamaño real
-  if (planViewport.value) {
-    const ro = new ResizeObserver(() => { updateScreenWidth() })
-    ro.observe(planViewport.value)
-    setTimeout(() => ro.disconnect(), 2000)
-  }
-
-  setTimeout(() => { updateScreenWidth() }, 50)
-  setTimeout(() => { updateScreenWidth() }, 200)
-  setTimeout(() => { updateScreenWidth() }, 500)
-})
-onUnmounted(() => { window.removeEventListener('resize', updateScreenWidth) })
-
-const planCardWidth = computed(() => {
-  if (screenWidth.value <= 360) return 240
-  if (screenWidth.value <= 480) return 260
-  if (screenWidth.value <= 768) return 270
-  return 290
-})
-
-const planGap = computed(() => {
-  if (screenWidth.value <= 480) return 16
-  if (screenWidth.value <= 768) return 20
-  return 32
-})
-
-const planTrackOffset = computed(() => {
-  if (!planViewport.value) return 0
-  const vw = planViewport.value.offsetWidth
-  const cardW = planCardWidth.value
-  const gap = planGap.value
-  const step = cardW + gap
-  // virtualIndex crece sin límite — el track se mueve continuamente sin saltos
-  const realIndex = virtualIndex.value + plans.length
-  const baseOffset = (vw - cardW) / 2 - (realIndex * step)
-  if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
-  return baseOffset
-})
-
-// Normaliza virtualIndex al bloque del medio sin animación
-// El carrusel es infinito: cuando llegamos al borde de una copia,
-// saltamos silenciosamente a la misma posición visual en otra copia
-const normalize = () => {
-  const len = plans.length
-  // Mantener virtualIndex siempre en el rango [-len/2, len/2] para evitar números grandes
-  if (virtualIndex.value >= len) {
-    virtualIndex.value -= len
-  } else if (virtualIndex.value < 0) {
-    virtualIndex.value += len
-  }
-}
-
-const prevPlan = () => {
-  virtualIndex.value--
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
-}
-const nextPlan = () => {
-  virtualIndex.value++
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
-}
-const goToPlan = (i) => {
-  virtualIndex.value = i
-  requestAnimationFrame(() => requestAnimationFrame(normalize))
-}
-
-const plans = [
-  { name: 'Plan Basic – Integral', icon: 'bi-gift',           price: '$5',   rawPrice: 5, features: ['2 usuarios', '5 GB almacenamiento', 'Todas las funciones activas', 'Soporte básico'],        ideal: 'Ideal para talleres pequeños que están empezando.', featured: false },
-  { name: 'Plan Start',            icon: 'bi-stars',          price: '$19',  rawPrice: 19,            features: ['Hasta 5 usuarios', '50 GB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para centros pequeños con flujo moderado.',   featured: false },
-  { name: 'Plan Growth',           icon: 'bi-graph-up-arrow', price: '$49',  rawPrice: 49,           features: ['Hasta 15 usuarios', '200 GB almacenamiento', 'Todas las funciones'],                        ideal: 'Ideal para centros medianos con varios técnicos.',  featured: false },
-  { name: 'Plan Business',         icon: 'bi-briefcase-fill', price: '$99',  rawPrice: 99,         features: ['Hasta 40 usuarios', '1 TB almacenamiento', 'Todas las funciones'],                          ideal: 'Ideal para empresas con varias sedes.',             featured: false },
-  { name: 'Plan Enterprise',       icon: 'bi-building',       price: '$179', rawPrice: 179,       features: ['Hasta 100 usuarios', '2 TB almacenamiento', 'Todas las funciones', 'Soporte prioritario'], ideal: 'Ideal para redes grandes de servicio técnico.',     featured: true  },
-]
 
 const allFeatures = [
   { text: 'Gestión completa de agendas',                   icon: 'bi-calendar-check-fill'    },
@@ -390,14 +398,59 @@ const allFeatures = [
 const inputTB    = ref(2)
 const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.pricing-header, .plan-card-animate, .storage-cards-wrap').forEach(el => {
+    observer.observe(el)
+  })
+})
 </script>
 
-
 <style scoped>
+/* ══ ANIMACIONES DE ENTRADA ══ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
 .pricing {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.header.animate-visible {
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .container {
@@ -480,7 +533,6 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 .plans-track {
   display: flex;
   gap: v-bind(planGap + 'px');
-  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   will-change: transform;
   align-items: center;
   height: 40rem;
@@ -551,7 +603,31 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, background 0.35s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.plan-card:hover::before {
+  transform: scaleX(1);
+}
+
+.plan-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 48px var(--accent-glow);
 }
 
 @media (max-width: 768px) { .plan-card { width: 270px; min-height: 580px; } }
@@ -607,12 +683,25 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
 .plan-ideal { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem; font-style: italic; padding-top: 0.5rem; border-top: 1px dashed var(--border-soft); display: flex; align-items: flex-start; gap: 0.4rem; transition: color 0.35s; line-height: 1.4; }
 .plan-ideal i { color: var(--accent); font-size: 0.85rem; flex-shrink: 0; margin-top: 0.1rem; }
 
-.btn-primary, .btn-outline, a.btn-primary, a.btn-outline { display: flex; width: 100%; padding: 0.8rem; font-weight: 700; font-size: 0.9rem; font-family: inherit; cursor: pointer; transition: all 0.2s ease; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.5rem; text-decoration: none; text-align: center; border-radius: 0.75rem; box-sizing: border-box; }
+.btn-primary, .btn-outline, a.btn-primary, a.btn-outline { display: flex; width: 100%; padding: 0.8rem; font-weight: 700; font-size: 0.9rem; font-family: inherit; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.5rem; text-decoration: none; text-align: center; border-radius: 0.75rem; box-sizing: border-box; position: relative; overflow: hidden; }
 .btn-primary, a.btn-primary { background: var(--accent); color: var(--accent-text); border: none; box-shadow: 0 0 18px var(--accent-glow); }
-.btn-primary:hover, a.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 28px var(--accent-glow); }
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.btn-primary:hover::before {
+  transform: translateX(100%);
+}
+.btn-primary:hover, a.btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 32px var(--accent-glow); }
+.btn-primary:active { transform: translateY(-1px) scale(0.98); }
 .btn-outline, a.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
-.btn-outline:hover, a.btn-outline:hover { background: var(--border-soft); border-color: var(--accent); color: var(--accent); }
-.btn-outline i, a.btn-outline i { color: var(--accent); }
+.btn-outline:hover, a.btn-outline:hover { background: var(--border-soft); border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.btn-outline i, a.btn-outline i { color: var(--accent); transition: transform 0.3s ease; }
+.btn-outline:hover i { transform: scale(1.2); }
 
 .features-section { margin-bottom: 4rem; background: var(--bg-card); border-radius: 2rem; padding: 2.5rem; border: 1px solid var(--border-soft); transition: background 0.35s; }
 .features-title { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 2rem; text-align: center; letter-spacing: -0.02em; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: color 0.35s; }
@@ -645,7 +734,12 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
   justify-content: space-between;
   gap: 0.85rem;
   text-align: center;
-  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.35s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.storage-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px) scale(1.02);
 }
 
 @media (max-width: 768px) { .storage-card { padding: 1.5rem 1rem; min-height: 240px; } }
@@ -713,6 +807,4 @@ const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
   .storage-track { gap: 8px; }
   .carr-arrow { width: 1.75rem; height: 1.75rem; font-size: 0.75rem; }
 }
-
-/* ══ TOAST — estilos en App.vue (global) ══ */
 </style>

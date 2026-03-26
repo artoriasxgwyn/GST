@@ -60,11 +60,14 @@
 
     <!-- ══ SECCIÓN INFERIOR ══ -->
     <div class="footer-bottom">
-      <div class="powered-by">
+      <a href="https://www.operacionsistemica.com/?gad_source=1&gad_campaignid=23501666095&gclid=CjwKCAjwspPOBhB9EiwATFbi5PYGlvxQaxNYw6JLbVNCSqXf-2lnBOZFSEpIzOuVu5IHAsbNCYtnfBoCn2YQAvD_BwE"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="powered-by">
         <span>Powered by</span>
         <img :src="props.darkMode ? logoOSWhite : logoOSColor" alt="Logo de Operación Sistémica, empresa creadora de GST"
           class="powered-logo" />
-      </div>
+      </a>
       <hr class="divider-v2" />
       <div class="legal-text">
         <strong><p>© 2019-2026 GST. Todos los derechos reservados.</p></strong>
@@ -131,13 +134,12 @@ const props = defineProps({ darkMode: Boolean })
   background: var(--border-soft);
   color: var(--accent);
   font-size: 1.1rem;
-  transition: all 0.2s ease;
+  transition: transform 0.3s ease;
   text-decoration: none;
 }
+
 .social-icon:hover {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: translateY(-3px);
+  transform: scale(1.15);
 }
 .divider-v {
   background: var(--border);
@@ -176,12 +178,30 @@ const props = defineProps({ darkMode: Boolean })
   font-size: 0.88rem;
   color: var(--text-muted);
   text-decoration: none;
-  transition: color 0.2s, transform 0.2s;
+  transition: all 0.3s ease;
   display: inline-block;
+  position: relative;
+  padding-left: 0;
 }
+
+.link-list a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
 .link-list a:hover {
   color: var(--accent);
-  transform: translateX(3px);
+  transform: translateX(5px);
+}
+
+.link-list a:hover::after {
+  width: 100%;
 }
 .divider-h {
   background: var(--border);
@@ -292,5 +312,18 @@ const props = defineProps({ darkMode: Boolean })
   .logo{
 width: 10rem;
   }
+}
+
+/* ══ PANTALLAS GRANDES 2560px ══ */
+@media (min-width: 2560px) {
+  .footer { padding: 4% 4% 2% 4%; }
+  .footer-top { gap: 4rem; }
+  .tagline { font-size: 1.1rem; max-width: 30rem; }
+  .logo { width: 50%; }
+  .col-heading { font-size: 0.9rem; }
+  .link-list a { font-size: 1.05rem; }
+  .social-icon { width: 2.8rem; height: 2.8rem; font-size: 1.3rem; }
+  .powered-logo { height: 5rem; }
+  .legal-text p { font-size: 0.95rem; }
 }
 </style>

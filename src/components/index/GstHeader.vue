@@ -101,7 +101,7 @@ const goHome = () => {
 
 @media (min-width: 1440px) {
   .logo {
-    height: 4vh;
+    height: 3vh;
   }
 }
 @media (min-width: 2560px) {
@@ -129,18 +129,38 @@ const goHome = () => {
   border: 1px solid var(--border);
   color: var(--accent);
   font-size: 1.1rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
+  overflow: hidden;
+}
+
+.btn-cart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-cart:hover::before {
+  opacity: 1;
 }
 
 .btn-cart:hover {
   background: var(--border);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-sm), 0 4px 12px var(--accent-glow);
 }
 
 .btn-cart i {
   color: var(--accent);
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.btn-cart:hover i {
+  transform: scale(1.2);
 }
 
 .cart-badge {
@@ -160,6 +180,13 @@ const goHome = () => {
   padding: 0 0.2rem;
   border: 1px solid var(--bg-card);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  animation: pulse-badge 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 /* ===== BOTÓN INICIAR SESIÓN ===== */
@@ -179,12 +206,37 @@ const goHome = () => {
   cursor: pointer;
   color: var(--accent);
   font-size: 1rem;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.btn-dark-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-dark-toggle:hover::before {
+  opacity: 1;
 }
 
 .btn-dark-toggle:hover {
   background: var(--border);
-  transform: rotate(15deg);
+  transform: rotate(15deg) scale(1.1);
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.btn-dark-toggle i {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.btn-dark-toggle:hover i {
+  transform: scale(1.2);
 }
 
 /* ===== BOTÓN MENÚ ===== */

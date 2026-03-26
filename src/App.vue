@@ -128,14 +128,16 @@ body {
   transition: background 0.35s ease, color 0.35s ease;
   padding-bottom: 4.5rem;
   width: 100%;
-  max-width: 1400px;
+  max-width: 2560px;
   margin: 0 auto;
   overflow-x: hidden;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
 }
 
-.header {
-  position: relative;
+@media (min-width: 2560px) {
+  .app {
+    max-width: 2560px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -189,39 +191,6 @@ button {
   position: absolute;
 }
 
-/* Animista slide-in-bottom */
-.slide-in-bottom {
-  -webkit-animation: slide-in-bottom 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  animation: slide-in-bottom 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-}
-
-@-webkit-keyframes slide-in-bottom {
-  0% {
-    -webkit-transform: translateY(1000px);
-    transform: translateY(1000px);
-    opacity: 0;
-  }
-
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slide-in-bottom {
-  0% {
-    -webkit-transform: translateY(1000px);
-    transform: translateY(1000px);
-    opacity: 0;
-  }
-
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 /* ===== TOAST GLOBAL ===== */
 .gst-toast-msg {
@@ -243,7 +212,7 @@ button {
   align-items: center;
   gap: 0.75rem;
   white-space: nowrap;
-  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 @media (max-width:425px) {
@@ -258,7 +227,6 @@ button {
 }
 
 .gst-toast-msg:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
   border-color: var(--accent);
 }
@@ -266,13 +234,12 @@ button {
 /* Animaciones */
 .gst-toast-enter-active,
 .gst-toast-leave-active {
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.35s ease;
 }
 
 .gst-toast-enter-from,
 .gst-toast-leave-to {
   opacity: 0;
-  transform: translateY(-0.5rem);
 }
 
 /* Responsive */

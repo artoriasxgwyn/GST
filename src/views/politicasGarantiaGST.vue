@@ -194,29 +194,23 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, nextTick } from 'vue'
+import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
+import { onMounted, nextTick } from 'vue'
 onMounted(() => {
   nextTick(() => {
-    // Scroll to hash
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      } else {
-        setTimeout(() => {
-          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-        }, 300)
+        el.scrollIntoView({ block: 'start' })
       }
     }
-
-
   })
 })
 </script>
@@ -644,5 +638,18 @@ onMounted(() => {
   .warranty-meta { font-size: 0.75rem; }
   .channels { gap: 0.4rem; }
   .channel-pill { font-size: 0.76rem; }
+}
+
+/* ══ PANTALLAS GRANDES ══ */
+@media (min-width: 1400px) {
+  .container { max-width: 1100px; }
+}
+
+@media (min-width: 1920px) {
+  .container { max-width: 1300px; }
+}
+
+@media (min-width: 2560px) {
+  .container { max-width: 1600px; }
 }
 </style>
