@@ -1,21 +1,37 @@
 <template>
   <header class="header">
-    <nav class="nav">
-      <router-link to="/" class="brand" @click.prevent="goHome">
-        <img :src="darkMode ? logoWhite : logoColor" alt="Logo Gst" class="logo">
+    <nav class="nav" aria-label="Navegación principal">
+      <router-link to="/" class="brand" @click.prevent="goHome" aria-label="GST - Inicio">
+        <img :src="darkMode ? logoWhite : logoColor" alt="GST Logo" class="logo" width="120" height="40">
       </router-link>
+
       <div class="actions">
-        <!-- Botón Carrito -->
-        <router-link to="/carrito#start" class="btn-cart" :title="'Ver carrito'">
-          <i class="bi bi-cart-fill"></i>
-          <span class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</span>
+        <!-- Botón Carrito - Mejorado para accesibilidad -->
+        <router-link
+          to="/carrito#start"
+          class="btn-icon btn-cart"
+          :aria-label="`Ver carrito, ${cartCount} items`"
+        >
+          <i class="bi bi-cart-fill" aria-hidden="true"></i>
+          <span
+            v-if="cartCount > 0"
+            class="cart-badge"
+            aria-hidden="true"
+          >{{ cartCount }}</span>
         </router-link>
-        
-        <!-- Dark mode toggle -->
-        <button class="btn-dark-toggle" @click="$emit('toggle-dark')" :title="darkMode ? 'Modo claro' : 'Modo oscuro'">
-          <i :class="darkMode ? 'bi bi-sun-fill' : 'bi bi-moon-fill'"></i>
+
+        <!-- Dark mode toggle - Mejorado para accesibilidad -->
+        <button
+          class="btn-icon btn-dark-toggle"
+          @click="$emit('toggle-dark')"
+          :aria-label="darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          :aria-pressed="darkMode"
+        >
+          <i
+            :class="darkMode ? 'bi bi-sun-fill' : 'bi bi-moon-fill'"
+            aria-hidden="true"
+          ></i>
         </button>
-        
       </div>
     </nav>
   </header>
@@ -53,24 +69,27 @@ const goHome = () => {
 </script>
 
 <style scoped>
+/* ===== HEADER ===== */
 .header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: var(--z-sticky);
   background: var(--header-bg);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.35s ease, border-color 0.35s ease;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-soft);
+  transition: background-color var(--transition-slow), border-color var(--transition-slow);
 }
 
 .nav {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 4rem;
+  padding: 0 var(--space-6);
+  height: 4.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-4);
 }
 
 .brand {
@@ -113,20 +132,49 @@ const goHome = () => {
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-3);
 }
 
-/* ===== BOTÓN CARRITO ===== */
-.btn-cart {
+/* ===== BOTÓN ICONO BASE - Touch target 44x44px mínimo ===== */
+.btn-icon {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  border-radius: 0.5rem;
-  background: var(--border-soft);
-  border: 1px solid var(--border);
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-icon:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.btn-icon:active {
+  transform: scale(0.95);
+  background: var(--accent-soft);
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== BOTÓN CARRITO ===== */
+.btn-cart {
   color: var(--accent);
   font-size: 1.1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -163,17 +211,19 @@ const goHome = () => {
   transform: scale(1.2);
 }
 
+/* ===== BADGE DEL CARRITO ===== */
 .cart-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -4px;
+  right: -4px;
   background: var(--accent);
   color: var(--accent-text);
-  font-size: 0.65rem;
-  font-weight: 700;
-  min-width: 1.2rem;
-  height: 1.2rem;
-  border-radius: 9999px;
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,9 +239,17 @@ const goHome = () => {
   50% { transform: scale(1.15); }
 }
 
-/* ===== BOTÓN INICIAR SESIÓN ===== */
-
-
+@keyframes badge-pop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
 /* ===== BOTÓN DARK MODE ===== */
 .btn-dark-toggle {
@@ -239,30 +297,72 @@ const goHome = () => {
   transform: scale(1.2);
 }
 
-/* ===== BOTÓN MENÚ ===== */
-.btn-icon {
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  color: var(--text);
-  line-height: 1;
-  display: flex;
-  align-items: center;
+.btn-dark-toggle i {
+  transition: transform var(--transition-slow);
 }
 
-/* Responsive para móviles */
-@media (max-width: 480px) {
-  .btn-cart {
-    width: 2.2rem;
-    height: 2.2rem;
-    font-size: 1rem;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav {
+    height: 4rem;
+    padding: 0 var(--space-4);
   }
-  
+
+  .logo {
+    max-height: 2rem;
+  }
+
+  .btn-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 0 var(--space-3);
+  }
+
+  .actions {
+    gap: var(--space-2);
+  }
+
+  .btn-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: var(--text-base);
+  }
+
   .cart-badge {
-    font-size: 0.6rem;
-    min-width: 1rem;
-    height: 1rem;
+    min-width: 1.1rem;
+    height: 1.1rem;
+    font-size: 0.65rem;
+    top: -2px;
+    right: -2px;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .btn-icon,
+  .logo,
+  .brand {
+    transition: none;
+  }
+
+  .cart-badge {
+    animation: none;
+  }
+}
+
+/* ===== ALTO CONTRASTE ===== */
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom-width: 2px;
+  }
+
+  .btn-icon {
+    border-width: 2px;
   }
 }
 </style>

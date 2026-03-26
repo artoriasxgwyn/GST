@@ -160,10 +160,10 @@ const toastMsg = ref('')
 let toastTimer = null
 
 const showToast = (msg) => {
-  toastMsg.value = msg
-  toast.value = true
-  if (toastTimer) clearTimeout(toastTimer)
-  toastTimer = setTimeout(() => { toast.value = false }, 2500)
+toastMsg.value = msg
+toast.value = true
+if (toastTimer) clearTimeout(toastTimer)
+toastTimer = setTimeout(() => { toast.value = false }, 2500)
 }
 
 const annual = ref(false)
@@ -355,23 +355,23 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
 const closeAll = (e) => {
-  if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
-    selectedPlanIndex.value    = null
-    selectedStorageIndex.value = null
-  }
+if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
+  selectedPlanIndex.value    = null
+  selectedStorageIndex.value = null
+}
 }
 
 const addPlanToCart = (plan) => {
-  const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
-  cart.setPlan({
-    name:     plan.name,
-    price,
-    rawPrice: plan.rawPrice,
-    icon:     plan.icon,
-    features: plan.features,
-    months:   1,
-  })
-  showToast(`${plan.name} agregado al carrito`)
+const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
+cart.setPlan({
+  name:     plan.name,
+  price,
+  rawPrice: plan.rawPrice,
+  icon:     plan.icon,
+  features: plan.features,
+  months:   1,
+})
+showToast(`${plan.name} agregado al carrito`)
 }
 
 const selectStorage = (i) => selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
@@ -383,16 +383,16 @@ const addStorageToCart = (size, price) => {
 }
 
 const allFeatures = [
-  { text: 'Gestión completa de agendas',                   icon: 'bi-calendar-check-fill'    },
-  { text: 'Creación y seguimiento de órdenes de servicio', icon: 'bi-clipboard2-check-fill'  },
-  { text: 'Gestión de garantías',                          icon: 'bi-shield-check'           },
-  { text: 'Carga de fotos y videos',                       icon: 'bi-camera-fill'            },
-  { text: 'Historial por cliente y por equipo',            icon: 'bi-clock-history'          },
-  { text: 'Reportes completos',                            icon: 'bi-bar-chart-fill'         },
-  { text: 'Panel administrativo',                          icon: 'bi-speedometer2'           },
-  { text: 'Multi-sucursal',                                icon: 'bi-buildings-fill'         },
-  { text: 'Control de técnicos',                           icon: 'bi-person-gear'            },
-  { text: 'Soporte estándar',                              icon: 'bi-headset'                },
+{ text: 'Gestión completa de agendas',                   icon: 'bi-calendar-check-fill'    },
+{ text: 'Creación y seguimiento de órdenes de servicio', icon: 'bi-clipboard2-check-fill'  },
+{ text: 'Gestión de garantías',                          icon: 'bi-shield-check'           },
+{ text: 'Carga de fotos y videos',                       icon: 'bi-camera-fill'            },
+{ text: 'Historial por cliente y por equipo',            icon: 'bi-clock-history'          },
+{ text: 'Reportes completos',                            icon: 'bi-bar-chart-fill'         },
+{ text: 'Panel administrativo',                          icon: 'bi-speedometer2'           },
+{ text: 'Multi-sucursal',                                icon: 'bi-buildings-fill'         },
+{ text: 'Control de técnicos',                           icon: 'bi-person-gear'            },
+{ text: 'Soporte estándar',                              icon: 'bi-headset'                },
 ]
 
 const inputTB    = ref(2)
@@ -438,9 +438,9 @@ onMounted(() => {
 }
 
 .pricing {
-  padding: 5rem 0;
-  background: var(--bg-alt);
-  transition: background 0.35s;
+padding: 5rem 0;
+background: var(--bg-alt);
+transition: background 0.35s;
 }
 
 .header {
@@ -454,14 +454,14 @@ onMounted(() => {
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 1.5rem;
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 3.5rem;
+text-align: center;
+margin-bottom: 3.5rem;
 }
 
 .section-title {

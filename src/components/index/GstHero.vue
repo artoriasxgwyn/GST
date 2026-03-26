@@ -44,7 +44,14 @@ import { ref, onMounted, onUnmounted, defineProps, computed } from 'vue'
 import bgBlue from '@/assets/backgroundBlue.jpg'
 import bgGreen from '@/assets/backgroundGreen.jpg'
 
-const props = defineProps({ darkMode: Boolean })
+const props = defineProps({
+  darkMode: Boolean,
+  toggleForm: Function
+})
+
+const scrollToPricing = () => {
+  document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 
 const heroBg = computed(() => `url(${props.darkMode ? bgGreen : bgBlue})`)
 
