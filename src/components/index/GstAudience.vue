@@ -28,7 +28,8 @@ onMounted(() => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
+      } else {
+        entry.target.classList.remove('animate-visible')
       }
     })
   }, { threshold: 0.4 })
@@ -40,58 +41,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 .audience {
   padding: 3rem 0;
   background: var(--bg);
   text-align: center;
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-item {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-item.animate-visible {
-  animation: scaleIn 0.6s ease-out forwards;
 }
 
 @media (min-width: 768px) {
@@ -114,12 +68,35 @@ onMounted(() => {
 
 .section-title {
   font-size: clamp(1.6rem, 5vw, 2.6rem);
-  font-weight: 900; 
+  font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--text); 
+  color: var(--text);
   margin-bottom: 2rem; /* Reducido en móvil */
   transition: color 0.35s;
   line-height: 1.2;
+}
+
+.fade-in-section,
+.fade-in-item {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.fade-in-item.animate-visible {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (min-width: 768px) {
@@ -153,37 +130,20 @@ onMounted(() => {
   width: 4rem;
   height: 4rem;
   border-radius: 0.75rem;
-  background: var(--border-soft);
-  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.8rem;
   color: var(--accent);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.item:hover .icon-wrap::after {
-  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .item:hover .icon-wrap {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 24px var(--accent-glow);
+  transform: scale(1.15);
   border-color: var(--accent);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
 @media (min-width: 480px) {

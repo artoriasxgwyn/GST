@@ -6,7 +6,7 @@
         <div class="text-col">
           <h2 class="section-title fade-in-section">Funciones Profesionales Avanzadas</h2>
           <div class="feature-list">
-            <div v-for="(feat, i) in features" :key="feat.title" class="feature fade-in-feature" :style="{ animationDelay: `${i * 100}ms` }">
+            <div v-for="(feat, i) in features" :key="feat.title" class="feature fade-in-feature" :style="{ animationDelay: `${i * 150}ms` }">
               <div class="feature-icon">
                 <i :class="['bi', feat.icon]"></i>
               </div>
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="visual-col fade-in-section">
+        <div class="visual-col">
           <img :src="darkMode ? tecnicoVerde : tecnicoAzul" alt="tecnico" class="imgTecnico">
         </div>
 
@@ -43,7 +43,8 @@ onMounted(() => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
+      } else {
+        entry.target.classList.remove('animate-visible')
       }
     })
   }, { threshold: 0.4 })
@@ -55,51 +56,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInFeature {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
 .features {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-feature {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-feature.animate-visible {
-  animation: fadeInFeature 0.6s ease-out forwards;
 }
 
 .container {
@@ -147,6 +107,29 @@ onMounted(() => {
   transition: color 0.35s;
 }
 
+.fade-in-section,
+.fade-in-feature {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.fade-in-feature.animate-visible {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .feature-list {
   display: flex;
   flex-direction: column;
@@ -157,14 +140,17 @@ onMounted(() => {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: 0.75rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
 }
 
 .feature:hover {
-  background: var(--border-soft);
+  background: var(--bg-alt);
+  border-color: var(--border-soft);
   transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .feature-icon {
@@ -179,14 +165,13 @@ onMounted(() => {
   justify-content: center;
   font-size: 1.35rem;
   color: var(--accent);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .feature:hover .feature-icon {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: scale(1.15);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .feature-title {

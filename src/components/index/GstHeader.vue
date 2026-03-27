@@ -100,6 +100,9 @@ const goHome = () => {
 
 .logo {
   height: 6vh;
+  max-height: 2.5rem;
+  width: auto;
+  object-fit: contain;
   transition: opacity 0.35s ease;
 }
 
@@ -112,6 +115,13 @@ const goHome = () => {
   display: none;
 }
 
+@media (max-width: 480px) {
+  .logo {
+    height: auto;
+    height: 2rem;
+  }
+}
+
 @media (min-width: 640px) {
   .logo-sub {
     display: block;
@@ -121,11 +131,14 @@ const goHome = () => {
 @media (min-width: 1440px) {
   .logo {
     height: 3vh;
+    max-height: 2.5rem;
   }
 }
+
 @media (min-width: 2560px) {
   .logo {
     height: 2vh;
+    max-height: 3rem;
   }
 }
 
@@ -179,36 +192,21 @@ const goHome = () => {
   font-size: 1.1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  overflow: hidden;
-}
-
-.btn-cart::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.btn-cart:hover::before {
-  opacity: 1;
 }
 
 .btn-cart:hover {
-  background: var(--border);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: var(--shadow-sm), 0 4px 12px var(--accent-glow);
+  transform: scale(1.08);
+  background: var(--bg-elevated);
+  border-color: var(--border);
 }
 
 .btn-cart i {
   color: var(--accent);
-  transition: transform 0.3s ease;
-  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-cart:hover i {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 /* ===== BADGE DEL CARRITO ===== */
@@ -265,40 +263,21 @@ const goHome = () => {
   color: var(--accent);
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-.btn-dark-toggle::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.btn-dark-toggle:hover::before {
-  opacity: 1;
 }
 
 .btn-dark-toggle:hover {
-  background: var(--border);
-  transform: rotate(15deg) scale(1.1);
-  box-shadow: 0 4px 12px var(--accent-glow);
+  transform: scale(1.08);
+  background: var(--bg-elevated);
+  border-color: var(--border);
 }
 
 .btn-dark-toggle i {
-  position: relative;
-  z-index: 1;
-  transition: transform 0.3s ease;
+  color: var(--accent);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-dark-toggle:hover i {
-  transform: scale(1.2);
-}
-
-.btn-dark-toggle i {
-  transition: transform var(--transition-slow);
+  transform: scale(1.1);
 }
 
 /* ===== RESPONSIVE ===== */

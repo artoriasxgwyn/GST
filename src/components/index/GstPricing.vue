@@ -1,5 +1,5 @@
 <template>
-  <section class="pricing" id="planes" @click="closeAll">
+  <section class="pricing" id="planes">
     <!-- Toast -->
     <Teleport to=".app">
       <transition name="gst-toast">
@@ -9,7 +9,7 @@
       </transition>
     </Teleport>
     <div class="container">
-      <div class="header">
+      <div class="header fade-in-section">
         <h2 class="section-title">Planes de Gestión</h2>
         <div class="toggle">
           <span :class="['lbl', !annual && 'lbl--active']">Mensual</span>
@@ -24,23 +24,23 @@
     </div>
 
     <!-- ══ CARRUSEL PLANES (100% INFINITO) ══ -->
-    <div class="carousel-container">
+    <div class="carousel-container fade-in-carousel">
       <button class="carr-arrow carr-arrow--left" @click="prevPlan" aria-label="Anterior">
         <i class="bi bi-chevron-left"></i>
       </button>
-      
-      <div class="carousel-viewport" ref="planViewport" 
-        @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp" @mouseleave="onMouseLeave" 
-        @touchstart.passive="onTouchStart" @touchmove.passive="onTouchMove" @touchend="onTouchEnd" 
+
+      <div class="carousel-viewport" ref="planViewport"
+        @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp" @mouseleave="onMouseLeave"
+        @touchstart.passive="onTouchStart" @touchmove.passive="onTouchMove" @touchend="onTouchEnd"
         :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
-        
+
         <div class="plans-track"
           @transitionend.self="handleTransitionEnd"
-          :style="{ 
-            transform: `translateX(${planTrackOffset}px)`, 
-            transition: trackTransition 
+          :style="{
+            transform: `translateX(${planTrackOffset}px)`,
+            transition: trackTransition
           }">
-          
+
           <div v-for="(plan, i) in infinitePlans" :key="i" class="plan-card"
             :class="{
               featured: plan.featured,
@@ -51,7 +51,7 @@
 
             <i :class="['bi', plan.icon, 'plan-icon']"></i>
             <h3 class="plan-name">{{ plan.name }}</h3>
-            
+
             <div v-if="!annual" class="plan-price">
               {{ plan.price }} USD <span>/ mes</span>
             </div>
@@ -60,7 +60,7 @@
               <div class="plan-price">${{ annualPrice(plan.rawPrice) }} USD <span>/ mes</span></div>
               <span class="discount-tag"><i class="bi bi-tag-fill"></i> –20%</span>
             </div>
-            
+
             <ul class="plan-features">
               <li v-for="f in plan.features" :key="f">
                 <i class="bi bi-check-circle-fill check"></i> {{ f }}
@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      
+
       <button class="carr-arrow carr-arrow--right" @click="nextPlan" aria-label="Siguiente">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -92,19 +92,19 @@
 
     <!-- ══ SECCIÓN FUNCIONALIDADES Y ALMACENAMIENTO ══ -->
     <div class="container">
-      <div class="features-section">
+      <div class="features-section fade-in-features">
         <h3 class="features-title">
           <i class="bi bi-lightning-charge-fill"></i>
           Funcionalidades incluidas en TODOS los planes
         </h3>
         <div class="features-grid">
-          <div v-for="feature in allFeatures" :key="feature.text" class="feature-item">
+          <div v-for="(feature, i) in allFeatures" :key="feature.text" class="feature-item fade-in-feature" :style="{ animationDelay: `${i * 80}ms` }">
             <i :class="['bi', feature.icon, 'feature-check']"></i>
             <span>{{ feature.text }}</span>
           </div>
         </div>
       </div>
-      <div class="storage-header">
+      <div class="storage-header fade-in-storage-header">
         <h3 class="storage-title">
           <i class="bi bi-database-fill"></i> Planes adicionales de almacenamiento
         </h3>
@@ -116,9 +116,8 @@
     </div>
 
     <!-- ══ CARDS ALMACENAMIENTO ══ -->
-    <div class="storage-cards-wrap">
-      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 0 }"
-        @click="selectStorage(0)">
+    <div class="storage-cards-wrap fade-in-storage">
+      <div class="storage-card fade-in-storage-card">
         <i class="bi bi-hdd-stack-fill storage-icon"></i>
         <div class="storage-size">1 TB</div>
         <div class="storage-price">$11 USD <span>/ mes</span></div>
@@ -126,16 +125,15 @@
         <button class="btn-storage" @click.stop="addStorageToCart(1, 11)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
       </div>
 
-      <div class="storage-card" :class="{ 'storage-card--selected': selectedStorageIndex === 1 }"
-        @click="selectStorage(1)">
+      <div class="storage-card storage-card--two fade-in-storage-card">
         <i class="bi bi-hdd-rack-fill storage-icon"></i>
         <div class="storage-size">{{ inputTB }} TB</div>
         <div class="storage-price">${{ inputPrice }} USD <span>/ mes</span></div>
         <div class="storage-note">{{ inputTB * 1024 }} GB × $40 COP/GB</div>
         <div class="input-wrap">
-          <button class="input-btn" @click="inputTB > 2 && inputTB--"><i class="bi bi-dash"></i></button>
+          <button class="input-btn" @click.stop="inputTB > 2 && inputTB--"><i class="bi bi-dash"></i></button>
           <span class="input-val">{{ inputTB }} TB</span>
-          <button class="input-btn" @click="inputTB < 5 && inputTB++"><i class="bi bi-plus"></i></button>
+          <button class="input-btn" @click.stop="inputTB < 5 && inputTB++"><i class="bi bi-plus"></i></button>
         </div>
         <button class="btn-storage" @click.stop="addStorageToCart(inputTB, inputPrice)"><i class="bi bi-cart-check"></i> Agregar al carrito</button>
       </div>
@@ -152,7 +150,7 @@ defineProps({ darkMode: Boolean })
 const cart = useCartStore()
 
 const selectedPlanIndex    = ref(null)
-const selectedStorageIndex = ref(null)
+//const selectedStorageIndex = ref(null)
 
 // ══ TOAST ══
 const toast = ref(null)
@@ -259,7 +257,7 @@ const trackTransition = computed(() => {
 
 const planTrackOffset = computed(() => {
   if (isDragging.value && liveOffset.value !== 0) return liveOffset.value
-  
+
   const vw = viewportWidth.value || (planViewport.value ? planViewport.value.offsetWidth : window.innerWidth - 32)
   const step = planCardWidth.value + planGap.value
   const realIndex = virtualIndex.value + centerOffsetIndex
@@ -350,16 +348,23 @@ onMounted(() => {
     setTimeout(() => ro.disconnect(), 3000)
   }
   [50, 150, 300, 600, 1000].forEach(ms => setTimeout(updateViewportWidth, ms))
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-carousel, .fade-in-features, .fade-in-feature, .fade-in-storage-header, .fade-in-storage, .fade-in-storage-card').forEach(el => {
+    observer.observe(el)
+  })
 })
 
 onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
-
-const closeAll = (e) => {
-if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
-  selectedPlanIndex.value    = null
-  selectedStorageIndex.value = null
-}
-}
 
 const addPlanToCart = (plan) => {
 const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
@@ -374,7 +379,7 @@ cart.setPlan({
 showToast(`${plan.name} agregado al carrito`)
 }
 
-const selectStorage = (i) => selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
+//const selectStorage = (i) => selectedStorageIndex.value = selectedStorageIndex.value === i ? null : i
 
 const addStorageToCart = (size, price) => {
   if (!cart.plan) return showToast('Primero selecciona un plan GST')
@@ -397,46 +402,9 @@ const allFeatures = [
 
 const inputTB    = ref(2)
 const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
-
-onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.4 })
-
-  document.querySelectorAll('.pricing-header, .plan-card-animate, .storage-cards-wrap').forEach(el => {
-    observer.observe(el)
-  })
-})
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 .pricing {
 padding: 5rem 0;
 background: var(--bg-alt);
@@ -446,11 +414,6 @@ transition: background 0.35s;
 .header {
   text-align: center;
   margin-bottom: 3.5rem;
-  opacity: 0;
-}
-
-.header.animate-visible {
-  animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .container {
@@ -471,6 +434,59 @@ margin-bottom: 3.5rem;
   color: var(--text);
   margin-bottom: 1.25rem;
   transition: color 0.35s;
+}
+
+.fade-in-section,
+.fade-in-carousel,
+.fade-in-features,
+.fade-in-feature,
+.fade-in-storage-header,
+.fade-in-storage,
+.fade-in-storage-card {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.fade-in-carousel.animate-visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-features.animate-visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-feature.animate-visible {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.fade-in-storage-header.animate-visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-storage.animate-visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-storage-card.animate-visible {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .toggle {
@@ -603,31 +619,15 @@ margin-bottom: 3.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-}
-
-.plan-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-
-.plan-card:hover::before {
-  transform: scaleX(1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .plan-card:hover {
-  border-color: var(--accent);
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 16px 48px var(--accent-glow);
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px var(--accent-glow);
 }
 
 @media (max-width: 768px) { .plan-card { width: 270px; min-height: 580px; } }
@@ -734,12 +734,14 @@ margin-bottom: 3.5rem;
   justify-content: space-between;
   gap: 0.85rem;
   text-align: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .storage-card:hover {
   border-color: var(--accent);
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 32px var(--accent-glow);
 }
 
 @media (max-width: 768px) { .storage-card { padding: 1.5rem 1rem; min-height: 240px; } }

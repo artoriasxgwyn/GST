@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section class="hero" ref="heroRef">
     <div class="glow"></div>
     <div class="container">
       <div class="content-col">
@@ -19,7 +19,7 @@
         </p>
 
         <div class="countdown hero-fade-in-up">
-          <div v-for="(unit, i) in countdown" :key="unit.label" class="countdown-unit" :style="{ transitionDelay: `${i * 50}ms` }">
+          <div v-for="(unit) in countdown" :key="unit.label" class="countdown-unit">
             <span class="countdown-num">{{ unit.value }}</span>
             <span class="countdown-label">{{ unit.label }}</span>
           </div>
@@ -48,6 +48,8 @@ const props = defineProps({
   darkMode: Boolean,
   toggleForm: Function
 })
+
+//const heroRef = ref(null)
 
 const scrollToPricing = () => {
   document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -87,6 +89,20 @@ const calculateCountdown = () => {
 onMounted(() => {
   calculateCountdown()
   timer = setInterval(calculateCountdown, 1000)
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.hero-fade-in, .hero-fade-in-up').forEach(el => {
+    observer.observe(el)
+  })
 })
 
 onUnmounted(() => {
@@ -95,33 +111,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 .hero {
   position: relative;
   overflow: hidden;
@@ -135,21 +124,28 @@ onUnmounted(() => {
 }
 
 /* Animaciones de entrada */
-.hero-fade-in {
+.hero-fade-in,
+.hero-fade-in-up {
+  opacity: 0;
+}
+
+.hero-fade-in.animate-visible {
   animation: fadeIn 0.8s ease-out forwards;
 }
 
-.hero-fade-in-up {
-  opacity: 0;
+.hero-fade-in-up.animate-visible {
   animation: fadeInUp 0.8s ease-out forwards;
 }
 
-.badge.hero-fade-in { animation-delay: 0.1s; }
-.title.hero-fade-in-up { animation-delay: 0.2s; }
-.subtitle.hero-fade-in-up { animation-delay: 0.3s; }
-.countdown.hero-fade-in-up { animation-delay: 0.4s; }
-.api-note.hero-fade-in-up { animation-delay: 0.5s; }
-.btn-primary.hero-fade-in-up { animation-delay: 0.6s; }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 @media (max-width:768px) {
   .hero {
@@ -230,7 +226,13 @@ onUnmounted(() => {
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
   margin-bottom: 1.25rem;
-  transition: background 0.35s, border-color 0.35s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.badge:hover {
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.05);
 }
 
 @media (max-width: 640px) {
@@ -296,31 +298,16 @@ onUnmounted(() => {
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   padding: 0.75rem 0.6rem;
-  background: var(--border-soft);
+  background: var(--bg-card);
   min-width: 3.5rem;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.countdown-unit::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .countdown-unit:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 16px var(--accent-glow);
-}
-
-.countdown-unit:hover::after {
-  opacity: 1;
 }
 
 @media (max-width: 640px) {
@@ -362,15 +349,15 @@ onUnmounted(() => {
 
 .btn-primary {
   margin-top: 0.5rem;
-  background: transparent;
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
   border: 2px solid var(--accent);
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 700;
   padding: 0.8rem 2rem;
   cursor: pointer;
-  box-shadow: 0 0 18px var(--accent-glow);
+  box-shadow: 0 4px 16px var(--accent-glow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
@@ -383,7 +370,7 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
   transform: translateX(-100%);
   transition: transform 0.5s ease;
 }
@@ -393,10 +380,8 @@ onUnmounted(() => {
 }
 
 .btn-primary:hover {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 40px var(--accent-glow);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .btn-primary:active {

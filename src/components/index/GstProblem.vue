@@ -48,98 +48,28 @@ const conGST = [
   'Monitoreo en tiempo real de cada servicio.',
 ]
 
-//const sectionRef = ref(null)
-
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
+      } else {
+        entry.target.classList.remove('animate-visible')
       }
     })
   }, { threshold: 0.4 })
 
-  document.querySelectorAll('.fade-in-section, .fade-in-section-left, .fade-in-section-right').forEach(el => {
+  document.querySelectorAll('.fade-in-section, .fade-in-section-left, .fade-in-section-right, .list-item-animate').forEach(el => {
     observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInListItem {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 .problem {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-section-left,
-.fade-in-section-right {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible,
-.fade-in-section-left.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-section-left.animate-visible {
-  animation: slideInLeft 0.8s ease-out forwards;
-}
-
-.fade-in-section-right.animate-visible {
-  animation: slideInRight 0.8s ease-out forwards;
-}
-
-.list-item-animate {
-  opacity: 0;
-  animation: fadeInListItem 0.5s ease-out forwards;
 }
 
 .container {
@@ -156,6 +86,49 @@ onMounted(() => {
   margin-bottom: 3rem;
   color: var(--text);
   transition: color 0.35s;
+}
+
+.fade-in-section,
+.fade-in-section-left,
+.fade-in-section-right,
+.list-item-animate {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.fade-in-section-left.animate-visible {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.fade-in-section-right.animate-visible {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+.list-item-animate.animate-visible {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .compare {
@@ -182,12 +155,13 @@ onMounted(() => {
   border-radius: 1rem;
   padding: 2rem;
   background: var(--bg-card);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .card--bad {
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .card--good {
@@ -195,18 +169,17 @@ onMounted(() => {
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .card--bad:hover {
-  border-color: rgba(239, 68, 68, 0.4);
-  box-shadow: 0 12px 40px rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
 }
 
 .card--good:hover {
   border-color: var(--accent);
-  box-shadow: 0 12px 40px var(--accent-glow);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .card-head {
@@ -242,7 +215,7 @@ onMounted(() => {
 }
 
 .card:hover .dot {
-  transform: scale(1.1) rotate(10deg);
+  transform: scale(1.15);
 }
 
 .dot--red {
@@ -268,7 +241,12 @@ onMounted(() => {
   font-size: 0.95rem;
   color: var(--text);
   line-height: 1.55;
-  transition: color 0.35s;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+}
+
+.list li:hover {
+  transform: translateX(4px);
 }
 
 .bullet {

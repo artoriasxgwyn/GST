@@ -5,7 +5,7 @@
     <div class="footer-top">
 
       <!-- Columna brand -->
-      <div class="brand-col">
+      <div class="brand-col fade-in-footer-left">
         <img :src="props.darkMode ? logoGSTWhite : logoGSTColor" alt="logoGST" class="logo">
         <p class="tagline">
           Plataforma digital para la gestión, control y seguimiento de servicios técnicos,
@@ -25,7 +25,7 @@
 
       <!-- Columnas de links -->
       <div class="links-grid">
-        <div class="link-col">
+        <div class="link-col fade-in-footer-right" :style="{ animationDelay: '100ms' }">
           <h5 class="col-heading">Empresa</h5>
           <ul class="link-list">
             <li><a href="#">¿Qué es GST?</a></li>
@@ -34,7 +34,7 @@
           </ul>
         </div>
 
-        <div class="link-col">
+        <div class="link-col fade-in-footer-right" :style="{ animationDelay: '200ms' }">
           <h5 class="col-heading">Soporte</h5>
           <ul class="link-list">
             <li><a href="#">Solicitar acceso</a></li>
@@ -43,7 +43,7 @@
           </ul>
         </div>
 
-        <div class="link-col">
+        <div class="link-col fade-in-footer-right" :style="{ animationDelay: '300ms' }">
           <h5 class="col-heading">Legal</h5>
           <ul class="link-list">
             <li><router-link to="/politicas#start">Política de Privacidad</router-link></li>
@@ -79,13 +79,29 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
 import logoGSTColor from '@/assets/logoGST.png'
 import logoGSTWhite from '@/assets/GSTBlanco.png'
 import logoOSWhite  from '@/assets/Operacion Sistemica Blanco.png'
 import logoOSColor  from '@/assets/Operacion sistemica.png'
 
 const props = defineProps({ darkMode: Boolean })
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.4 })
+
+  document.querySelectorAll('.fade-in-footer-left, .fade-in-footer-right').forEach(el => {
+    observer.observe(el)
+  })
+})
 </script>
 
 <style scoped>
@@ -97,6 +113,35 @@ const props = defineProps({ darkMode: Boolean })
   border-top: 1px solid var(--border-light);
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
+
+.fade-in-footer-left,
+.fade-in-footer-right {
+  opacity: 0;
+}
+
+.fade-in-footer-left.animate-visible {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.fade-in-footer-right.animate-visible {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .footer-top {
   display: flex;
   width: 100%;
