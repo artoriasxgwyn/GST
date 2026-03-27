@@ -3,7 +3,7 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="warranty-header">
+      <div class="warranty-header fade-in-section">
         <div class="badge">
           <i class="bi bi-shield-fill-check"></i>
           Políticas de Garantía
@@ -29,7 +29,7 @@
       <div class="sections">
 
         <!-- 1. Exclusiones -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-slash-circle-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">1. Exclusiones de Garantía</h2>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- 2. Condiciones por tipo -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-layers-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">2. Condiciones por Tipo de Servicio</h2>
@@ -96,7 +96,7 @@
         </div>
 
         <!-- 3. Procedimiento -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-diagram-3-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">3. Procedimiento para la Reclamación</h2>
@@ -141,7 +141,7 @@
         </div>
 
         <!-- 4. Limitación -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">4. Limitación de Responsabilidad</h2>
@@ -175,7 +175,7 @@
       </div>
 
       <!-- Contact CTA -->
-      <div class="contact-cta">
+      <div class="contact-cta fade-in-card">
         <i class="bi bi-headset"></i>
         <div>
           <strong>¿Necesitas presentar una reclamación de garantía?</strong>
@@ -184,7 +184,7 @@
       </div>
 
       <!-- Footer note -->
-      <div class="warranty-footer">
+      <div class="warranty-footer fade-in-section">
         <i class="bi bi-building"></i>
         <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019–2026 GST. Todos los derechos reservados.</span>
       </div>
@@ -194,28 +194,80 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
-import { onMounted, nextTick } from 'vue'
 onMounted(() => {
-  nextTick(() => {
+  setTimeout(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ block: 'start' })
+        el.scrollIntoView({ block: 'start', behavior: 'smooth' })
       }
     }
+  }, 100)
+
+  // Marcar todos los elementos como visibles inicialmente
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    el.classList.add('animate-visible')
+  })
+
+  // Luego configurar observer para cuando se haga scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES ══ */
+.fade-in-section,
+.fade-in-card {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-card.animate-visible {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.fade-in-card:nth-of-type(1) { animation-delay: 50ms; }
+.fade-in-card:nth-of-type(2) { animation-delay: 100ms; }
+.fade-in-card:nth-of-type(3) { animation-delay: 150ms; }
+.fade-in-card:nth-of-type(4) { animation-delay: 200ms; }
+.fade-in-card:nth-of-type(5) { animation-delay: 250ms; }
+.fade-in-card:nth-of-type(6) { animation-delay: 300ms; }
+.fade-in-card:nth-of-type(7) { animation-delay: 350ms; }
+.fade-in-card:nth-of-type(8) { animation-delay: 400ms; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .warranty {
   min-height: 100vh;
   background: var(--bg);

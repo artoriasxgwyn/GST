@@ -3,7 +3,7 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="refund-header anim-item">
+      <div class="refund-header fade-in-section">
         <div class="badge">
           <i class="bi bi-arrow-counterclockwise"></i>
           Política de Reembolsos
@@ -27,7 +27,7 @@
       </div>
 
       <!-- Alerta exclusión -->
-      <div class="exclusion-alert anim-item">
+      <div class="exclusion-alert fade-in-card">
         <div class="exclusion-alert-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
         <div class="exclusion-alert-body">
           <h3 class="exclusion-alert-title">Exclusión Importante</h3>
@@ -48,7 +48,7 @@
       <!-- Sections -->
       <div class="sections">
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-check2-circle"></i></div>
           <div class="section-body">
             <h2 class="section-title">1. Elegibilidad para Reembolso</h2>
@@ -74,7 +74,7 @@
           </div>
         </div>
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-clipboard2-check-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">2. Condiciones para Reembolso</h2>
@@ -95,7 +95,7 @@
           </div>
         </div>
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-diagram-3-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">3. Proceso de Reembolso</h2>
@@ -132,7 +132,7 @@
           </div>
         </div>
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-hourglass-split"></i></div>
           <div class="section-body">
             <h2 class="section-title">4. Tiempo de Procesamiento</h2>
@@ -144,7 +144,7 @@
           </div>
         </div>
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-bank2"></i></div>
           <div class="section-body">
             <h2 class="section-title">5. Gastos de Transacción</h2>
@@ -156,7 +156,7 @@
           </div>
         </div>
 
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-slash-circle-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">6. Excepciones</h2>
@@ -184,7 +184,7 @@
       </div>
 
       <!-- Contact CTA -->
-      <div class="contact-cta anim-item">
+      <div class="contact-cta fade-in-card">
         <i class="bi bi-chat-dots-fill"></i>
         <div>
           <strong>¿Tienes dudas sobre nuestra política de reembolsos?</strong>
@@ -193,7 +193,7 @@
       </div>
 
       <!-- Footer note -->
-      <div class="refund-footer anim-item">
+      <div class="refund-footer fade-in-section">
         <i class="bi bi-building"></i>
         <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019–2026 GST. Todos los derechos reservados.</span>
       </div>
@@ -203,28 +203,80 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
-import { onMounted, nextTick } from 'vue'
 onMounted(() => {
-  nextTick(() => {
+  setTimeout(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ block: 'start' })
+        el.scrollIntoView({ block: 'start', behavior: 'smooth' })
       }
     }
+  }, 100)
+
+  // Marcar todos los elementos como visibles inicialmente
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    el.classList.add('animate-visible')
+  })
+
+  // Luego configurar observer para cuando se haga scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES ══ */
+.fade-in-section,
+.fade-in-card {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-card.animate-visible {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.fade-in-card:nth-of-type(1) { animation-delay: 50ms; }
+.fade-in-card:nth-of-type(2) { animation-delay: 100ms; }
+.fade-in-card:nth-of-type(3) { animation-delay: 150ms; }
+.fade-in-card:nth-of-type(4) { animation-delay: 200ms; }
+.fade-in-card:nth-of-type(5) { animation-delay: 250ms; }
+.fade-in-card:nth-of-type(6) { animation-delay: 300ms; }
+.fade-in-card:nth-of-type(7) { animation-delay: 350ms; }
+.fade-in-card:nth-of-type(8) { animation-delay: 400ms; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .refund {
   min-height: 100vh;
   background: var(--bg);

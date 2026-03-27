@@ -3,14 +3,14 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="cart-header">
+      <div class="cart-header fade-in-section" :class="{ 'animate-enter': animateEnter }">
         <div class="badge"><i class="bi bi-cart3"></i> Carrito de Compra</div>
         <h1 class="cart-title">Tu Carrito</h1>
         <p class="cart-subtitle">Revisa y ajusta tu selección antes de continuar</p>
       </div>
 
       <!-- Empty state -->
-      <div v-if="!cart.plan && !cart.storage" class="empty-state">
+      <div v-if="!cart.plan && !cart.storage" class="empty-state fade-in-card" :class="{ 'animate-enter': animateEnter }">
         <i class="bi bi-cart-x"></i>
         <h2>Tu carrito está vacío</h2>
         <p>Selecciona un plan o almacenamiento adicional para continuar.</p>
@@ -26,7 +26,7 @@
         <div class="cart-items">
 
           <!-- Plan GST -->
-          <div v-if="cart.plan" class="cart-card">
+          <div v-if="cart.plan" class="cart-card fade-in-card delay-1" :class="{ 'animate-enter': animateEnter }">
             <div class="cart-card-header">
               <div class="cart-card-icon">
                 <i :class="['bi', cart.plan.icon]"></i>
@@ -63,7 +63,7 @@
           </div>
 
           <!-- Almacenamiento -->
-          <div v-if="cart.storage" class="cart-card">
+          <div v-if="cart.storage" class="cart-card fade-in-card delay-2" :class="{ 'animate-enter': animateEnter }">
             <div class="cart-card-header">
               <div class="cart-card-icon">
                 <i class="bi bi-hdd-stack-fill"></i>
@@ -94,7 +94,7 @@
           </div>
 
           <!-- Aviso un solo plan -->
-          <div class="info-note">
+          <div class="info-note fade-in-card delay-3" :class="{ 'animate-enter': animateEnter }">
             <i class="bi bi-info-circle-fill"></i>
             <span>Solo puedes tener <strong>un plan GST</strong> activo a la vez. Agregar un nuevo plan reemplazará el actual.</span>
           </div>
@@ -103,7 +103,7 @@
 
         <!-- Resumen -->
         <div class="cart-summary">
-          <div class="summary-card">
+          <div class="summary-card fade-in-card delay-4" :class="{ 'animate-enter': animateEnter }">
             <h3 class="summary-title">Resumen del pedido</h3>
 
             <div class="summary-lines">
@@ -133,7 +133,7 @@
               <i class="bi bi-whatsapp"></i> Solicitar por WhatsApp
             </button>
 
-            <button class="btn-clear" @click="cart.clearCart()">
+            <button class="btn-clear">
               <i class="bi bi-trash3"></i> Vaciar carrito
             </button>
           </div>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, nextTick } from 'vue'
+import { defineProps, onMounted, ref, watch } from 'vue'
 import { useCartStore } from '@/stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -155,6 +155,21 @@ defineProps({ darkMode: Boolean })
 const cart   = useCartStore()
 const router = useRouter()
 const route  = useRoute()
+
+// Controla animación de entrada
+const animateEnter = ref(false)
+
+// Resetear animación cuando se entra a la vista del carrito
+watch(() => route.path, (newPath) => {
+  if (newPath === '/carrito') {
+    // Resetear animación
+    animateEnter.value = false
+    // Reactivar después de un pequeño delay
+    setTimeout(() => {
+      animateEnter.value = true
+    }, 50)
+  }
+}, { immediate: true })
 
 const goToPlans = () => {
   router.push('/').then(() => {
@@ -172,16 +187,67 @@ const sendToWhatsapp = () => {
 
 onMounted(() => {
   cart.loadFromStorage()
-  nextTick(() => {
+  setTimeout(() => {
     if (route.hash) {
       const el = document.querySelector(route.hash)
       if (el) el.scrollIntoView({ behavior: 'smooth' })
     }
+  }, 100)
+
+  // Configurar observer para animar cuando el usuario hace scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.removeAttribute('data-animate')
+      } else {
+        entry.target.setAttribute('data-animate', 'out')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES ══ */
+/* Estado inicial: invisible para animación de entrada */
+.fade-in-section,
+.fade-in-card,
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animación de entrada (al cargar/refrescar la vista) */
+.fade-in-section.animate-enter,
+.fade-in-card.animate-enter,
+.fade-in-element.animate-enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delays escalonados para elementos del header */
+.fade-in-element:nth-of-type(1) { transition-delay: 50ms; }
+.fade-in-element:nth-of-type(2) { transition-delay: 100ms; }
+.fade-in-element:nth-of-type(3) { transition-delay: 150ms; }
+
+/* Delays escalonados para cada card */
+.delay-1 { transition-delay: 50ms; }
+.delay-2 { transition-delay: 120ms; }
+.delay-3 { transition-delay: 190ms; }
+.delay-4 { transition-delay: 260ms; }
+
+/* Animación cuando sale/entra del viewport (scroll) */
+.fade-in-section[data-animate="out"],
+.fade-in-card[data-animate="out"] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 .cart {
   min-height: 100vh;
   background: var(--bg);

@@ -3,7 +3,7 @@
     <div class="container">
 
       <!-- Header -->
-      <div class="cookies-header anim-item">
+      <div class="cookies-header fade-in-section">
         <div class="badge">
           <i class="bi bi-cookie"></i>
           Política de Cookies
@@ -26,7 +26,7 @@
       <div class="sections">
 
         <!-- ¿Qué son? -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-question-circle-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">¿Qué son las Cookies?</h2>
@@ -41,7 +41,7 @@
         </div>
 
         <!-- Uso -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-gear-fill"></i></div>
           <div class="section-body">
             <h2 class="section-title">Uso de Cookies en Nuestra Plataforma</h2>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Tipos -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-list-ul"></i></div>
           <div class="section-body">
             <h2 class="section-title">Tipos de Cookies que Utilizamos</h2>
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Control -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-toggles"></i></div>
           <div class="section-body">
             <h2 class="section-title">Control de Cookies</h2>
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Cambios -->
-        <div class="section-card">
+        <div class="section-card fade-in-card">
           <div class="section-icon"><i class="bi bi-arrow-repeat"></i></div>
           <div class="section-body">
             <h2 class="section-title">Cambios en la Política de Cookies</h2>
@@ -166,7 +166,7 @@
       </div>
 
       <!-- Footer note -->
-      <div class="cookies-footer anim-item">
+      <div class="cookies-footer fade-in-section">
         <i class="bi bi-building"></i>
         <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019–2026 GST. Todos los derechos reservados.</span>
       </div>
@@ -176,28 +176,78 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
-import { onMounted, nextTick } from 'vue'
 onMounted(() => {
-  nextTick(() => {
+  setTimeout(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ block: 'start' })
+        el.scrollIntoView({ block: 'start', behavior: 'smooth' })
       }
     }
+  }, 100)
+
+  // Marcar todos los elementos como visibles inicialmente
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    el.classList.add('animate-visible')
+  })
+
+  // Luego configurar observer para cuando se haga scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-card').forEach(el => {
+    observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES ══ */
+.fade-in-section,
+.fade-in-card {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-card.animate-visible {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.fade-in-card:nth-of-type(1) { animation-delay: 50ms; }
+.fade-in-card:nth-of-type(2) { animation-delay: 100ms; }
+.fade-in-card:nth-of-type(3) { animation-delay: 150ms; }
+.fade-in-card:nth-of-type(4) { animation-delay: 200ms; }
+.fade-in-card:nth-of-type(5) { animation-delay: 250ms; }
+.fade-in-card:nth-of-type(6) { animation-delay: 300ms; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .cookies {
   min-height: 100vh;
   background: var(--bg);

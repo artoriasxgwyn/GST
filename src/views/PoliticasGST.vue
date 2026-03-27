@@ -4,7 +4,7 @@
       <div class="container">
 
         <!-- Header -->
-        <div class="policy-header anim-item">
+        <div class="policy-header fade-in-section">
           <div class="badge">
             <i class="bi bi-shield-lock-fill"></i>
             Privacidad & Confidencialidad
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Intro -->
-        <div class="intro-card anim-item">
+        <div class="intro-card fade-in-up">
           <p>
             El sistema <strong>GST – Gestión Servicio Técnico</strong> es una plataforma tecnológica
             desarrollada y operada por <strong>OPERACION SISTEMICA SAS</strong>, identificada con
@@ -38,7 +38,7 @@
 
         <!-- Sections -->
         <div class="sections">
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-lock-fill"></i></div>
             <div class="section-body">
               <h2 class="section-title">Confidencialidad de la Información</h2>
@@ -47,7 +47,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-shield-check"></i></div>
             <div class="section-body">
               <h2 class="section-title">Seguridad y Protección de la Información</h2>
@@ -62,7 +62,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-person-lock"></i></div>
             <div class="section-body">
               <h2 class="section-title">Acceso a la Información</h2>
@@ -76,7 +76,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-file-earmark-person-fill"></i></div>
             <div class="section-body">
               <h2 class="section-title">Tratamiento de Datos Personales</h2>
@@ -90,7 +90,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-person-check-fill"></i></div>
             <div class="section-body">
               <h2 class="section-title">Derechos de los Titulares de Datos</h2>
@@ -105,7 +105,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-chat-dots-fill"></i></div>
             <div class="section-body">
               <h2 class="section-title">Canal de Atención para Solicitudes de Datos</h2>
@@ -118,7 +118,7 @@
             </div>
           </div>
 
-          <div class="section-card">
+          <div class="section-card fade-in-card">
             <div class="section-icon"><i class="bi bi-info-circle-fill"></i></div>
             <div class="section-body">
               <h2 class="section-title">Alcance</h2>
@@ -126,7 +126,7 @@
             </div>
           </div>
 
-          <div class="section-card section-card--last">
+          <div class="section-card section-card--last fade-in-card">
             <div class="section-icon"><i class="bi bi-pencil-square"></i></div>
             <div class="section-body">
               <h2 class="section-title">Modificaciones de la Política</h2>
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Footer note -->
-        <div class="policy-footer anim-item">
+        <div class="policy-footer fade-in-section">
           <i class="bi bi-building"></i>
           <span>OPERACION SISTEMICA SAS · NIT 901227220-8 · © 2019-2026 GST. Todos los derechos reservados.</span>
         </div>
@@ -148,29 +148,86 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 defineProps({ darkMode: Boolean })
 
 const route = useRoute()
 
-// Scroll to hash on mount
-import { onMounted, nextTick } from 'vue'
 onMounted(() => {
-  nextTick(() => {
+  // Scroll to hash on mount
+  setTimeout(() => {
     if (route.hash) {
       const id = route.hash.replace('#', '')
       const el = document.getElementById(id)
       if (el) {
-        el.scrollIntoView({ block: 'start' })
+        el.scrollIntoView({ block: 'start', behavior: 'smooth' })
       }
     }
+  }, 100)
+
+  // Marcar todos los elementos como visibles inicialmente
+  document.querySelectorAll('.fade-in-section, .fade-in-up, .fade-in-card').forEach(el => {
+    el.classList.add('animate-visible')
+  })
+
+  // Luego configurar observer para cuando se haga scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-visible')
+      } else {
+        entry.target.classList.remove('animate-visible')
+      }
+    })
+  }, { threshold: 0.1 })
+
+  document.querySelectorAll('.fade-in-section, .fade-in-up, .fade-in-card').forEach(el => {
+    observer.observe(el)
   })
 })
 </script>
 
 <style scoped>
+/* ══ ANIMACIONES ══ */
+.fade-in-section,
+.fade-in-up,
+.fade-in-card {
+  opacity: 0;
+}
+
+.fade-in-section.animate-visible {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-up.animate-visible {
+  animation: fadeInUp 0.7s ease-out forwards;
+}
+
+.fade-in-card.animate-visible {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.fade-in-card:nth-of-type(1) { animation-delay: 50ms; }
+.fade-in-card:nth-of-type(2) { animation-delay: 100ms; }
+.fade-in-card:nth-of-type(3) { animation-delay: 150ms; }
+.fade-in-card:nth-of-type(4) { animation-delay: 200ms; }
+.fade-in-card:nth-of-type(5) { animation-delay: 250ms; }
+.fade-in-card:nth-of-type(6) { animation-delay: 300ms; }
+.fade-in-card:nth-of-type(7) { animation-delay: 350ms; }
+.fade-in-card:nth-of-type(8) { animation-delay: 400ms; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .privacy {
   min-height: 100vh;
   background: var(--bg);

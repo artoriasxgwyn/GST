@@ -1,7 +1,13 @@
 <template>
   <div :class="['app', darkMode ? 'dark' : 'light']">
     <GstHeader :dark-mode="darkMode" @toggle-menu="menuOpen = !menuOpen" @toggle-dark="toggleDarkMode" class="header" />
-    <router-view :dark-mode="darkMode" @toggle-form="toggleForm" />
+    <router-view v-slot="{ Component, route }">
+      <transition v-if="route.path !== '/carrito'" name="page-fade" mode="out-in">
+        <component :is="Component" :key="route.fullPath" :dark-mode="darkMode" @toggle-form="toggleForm" />
+      </transition>
+      <!-- Sin transición para el carrito -->
+      <component v-else :is="Component" :key="route.fullPath" :dark-mode="darkMode" @toggle-form="toggleForm" />
+    </router-view>
     <GstFooter :dark-mode="darkMode" />
     <WompiForm :dark-mode="darkMode" class="wompiForm" v-show="isForm" />
   </div>
@@ -355,6 +361,22 @@ button {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* ══ TRANSICION ENTRE VISTAS ══ */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
 }
 
 .wompiForm {
