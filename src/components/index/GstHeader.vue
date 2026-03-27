@@ -82,7 +82,7 @@ const goHome = () => {
 }
 
 .nav {
-  max-width: 1200px;
+  max-width: 1700px;
   margin: 0 auto;
   padding: 0 var(--space-6);
   height: 4.5rem;
