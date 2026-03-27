@@ -40,106 +40,70 @@ const toggleDarkMode = () => { darkMode.value = !darkMode.value }
    TOKENS SEMÁNTICOS DE COLOR
    ======================================== */
 
-/* MODO CLARO - Mejorado para accesibilidad */
+/* MODO CLARO */
 .light {
-  /* Surfaces */
-  --bg: #fafbfc;
-  --bg-alt: #f1f5f9;
+  --bg: #ffffff;
+  --bg-alt: #eaf8f8;
   --bg-card: #ffffff;
-  --bg-elevated: #ffffff;
-
-  /* Textos con contraste WCAG 4.5:1+ */
-  --text: #0f172a;           /* slate-900 - 15.3:1 */
-  --text-secondary: #334155; /* slate-700 - 11.8:1 */
-  --text-muted: #475569;     /* slate-600 - 7.5:1 */
-  --text-soft: #64748b;      /* slate-500 - 5.7:1 */
-
-  /* Colores de acento - Blue optimizado */
-  --accent: #0ea5e9;         /* sky-500 - mejor contraste */
-  --accent-hover: #0284c7;   /* sky-600 */
-  --accent-soft: rgba(14, 165, 233, 0.1);
-  --accent-glow: rgba(14, 165, 233, 0.25);
-
-  /* Estados semánticos */
-  --success: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.08);
-  --error: #dc2626;
-  --error-bg: rgba(220, 38, 38, 0.08);
-  --warning: #f59e0b;
-
-  /* Bordes */
-  --border: rgba(148, 163, 184, 0.3);
-  --border-soft: rgba(148, 163, 184, 0.15);
-  --border-light: rgba(148, 163, 184, 0.08);
-
-  /* Elevación y sombras */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px var(--accent-glow);
-
-  /* Header */
-  --header-bg: rgba(250, 251, 252, 0.92);
-
-  /* Título hero */
-  --title: #0f172a;
-  --num-color: var(--accent);
-  --num-opacity: 0.55;
-
-  /* Texto sobre acento */
+  --bg-elevated: #f5f9fc;
+  --header-bg: rgba(255, 255, 255, 0.88);
+  --text: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-soft: #475569;
+  --border: rgba(18, 112, 182, 0.3);
+  --border-soft: rgba(18, 112, 182, 0.15);
+  --border-light: rgba(18, 112, 182, 0.1);
+  --accent: #1270b6;
+  --accent-hover: #0e5a8a;
   --accent-text: #ffffff;
+  --accent-glow: rgba(18, 112, 182, 0.3);
+  --accent-soft: rgba(18, 112, 182, 0.1);
+  --num-color: #1270b6;
+  --num-opacity: 0.55;
+  --shadow: 0 4px 24px rgba(18, 112, 182, 0.12);
+  --shadow-sm: 0 2px 12px rgba(18, 112, 182, 0.08);
+  --shadow-md: 0 6px 20px rgba(18, 112, 182, 0.15);
+  --shadow-lg: 0 8px 32px rgba(18, 112, 182, 0.2);
+  --success: #10b981;
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.05);
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --title: #59a1e0;
 }
 
-/* MODO OSCURO - Optimizado para legibilidad */
+/* MODO OSCURO */
 .dark {
-  /* Surfaces */
-  --bg: #0f172a;
-  --bg-alt: #1e293b;
-  --bg-card: #1e293b;
-  --bg-elevated: #334155;
-
-  /* Textos con contraste mejorado */
-  --text: #f8fafc;           /* slate-50 - 18.9:1 */
-  --text-secondary: #e2e8f0; /* slate-200 - 14.8:1 */
-  --text-muted: #94a3b8;     /* slate-400 - 7.2:1 */
-  --text-soft: #64748b;      /* slate-500 - 4.6:1 */
-
-  /* Colores de acento - Emerald para dark mode */
-  --accent: #34d399;         /* emerald-400 */
-  --accent-hover: #6ee7b7;   /* emerald-300 */
-  --accent-soft: rgba(52, 211, 153, 0.1);
-  --accent-glow: rgba(52, 211, 153, 0.3);
-
-  /* Estados semánticos */
-  --success: #34d399;
-  --success-bg: rgba(52, 211, 153, 0.1);
-  --error: #f87171;
-  --error-bg: rgba(248, 113, 113, 0.1);
-  --warning: #fbbf24;
-
-  /* Bordes */
-  --border: rgba(148, 163, 184, 0.2);
-  --border-soft: rgba(148, 163, 184, 0.1);
-  --border-light: rgba(148, 163, 184, 0.05);
-
-  /* Elevación */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 30px var(--accent-glow);
-
-  /* Header */
-  --header-bg: rgba(15, 23, 42, 0.95);
-
-  /* Título hero */
-  --title: #f8fafc;
-  --num-color: var(--accent);
+  --bg: #1D1D1B;
+  --bg-alt: #151514;
+  --bg-card: #262624;
+  --bg-elevated: #2a2a28;
+  --title: #f0f0ef;
+  --text: #f0f0ef;
+  --text-secondary: #d0d0d0;
+  --text-muted: #eaf8f8;
+  --text-soft: #a0aec0;
+  --border: rgba(80, 238, 173, 0.2);
+  --border-soft: rgba(80, 238, 173, 0.08);
+  --border-light: rgba(80, 238, 173, 0.05);
+  --accent: #50EEAD;
+  --accent-hover: #75f5bd;
+  --accent-text: #1D1D1B;
+  --accent-glow: rgba(80, 238, 173, 0.4);
+  --accent-soft: rgba(80, 238, 173, 0.1);
+  --num-color: #50EEAD;
   --num-opacity: 0.4;
-
-  /* Texto sobre acento */
-  --accent-text: #0f172a;
+  --header-bg: rgba(29, 29, 27, 0.9);
+  --shadow: 0 4px 28px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 16px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --success: #10b981;
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
 }
 
 /* ========================================
@@ -257,7 +221,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh; /* Mobile viewport height */
   transition: background-color var(--transition-slow), color var(--transition-slow);
-  padding-bottom: var(--space-20);
+
   width: 100%;
   max-width: 2560px;
   margin: 0 auto;
@@ -268,12 +232,6 @@ body {
 @media (min-width: 2560px) {
   .app {
     max-width: 2560px;
-  }
-}
-
-@media (min-width: 768px) {
-  .app {
-    padding-bottom: 0;
   }
 }
 
