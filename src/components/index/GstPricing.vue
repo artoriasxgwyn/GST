@@ -98,7 +98,7 @@
           Funcionalidades incluidas en TODOS los planes
         </h3>
         <div class="features-grid">
-          <div v-for="(feature, i) in allFeatures" :key="feature.text" class="feature-item">
+          <div v-for="(feature) in allFeatures" :key="feature.text" class="feature-item">
             <i :class="['bi', feature.icon, 'feature-check']"></i>
             <span>{{ feature.text }}</span>
           </div>
@@ -142,7 +142,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onUnmounted, defineProps } from 'vue'
+import { ref, computed, onUnmounted, defineProps,onMounted } from 'vue'
 import { useCartStore } from '@/stores/cartStore'
 
 defineProps({ darkMode: Boolean })

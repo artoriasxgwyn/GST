@@ -3,7 +3,7 @@
     <div class="container">
       <h2 class="section-title">¿Para quién es GST?</h2>
       <div class="grid">
-        <div v-for="(item, i) in audience" :key="item.title" class="item">
+        <div v-for="(item) in audience" :key="item.title" class="item">
           <div class="icon-wrap">
             <i :class="['bi', item.icon]"></i>
           </div>

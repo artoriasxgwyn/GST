@@ -6,7 +6,7 @@
         <div class="text-col">
           <h2 class="section-title">Funciones Profesionales Avanzadas</h2>
           <div class="feature-list">
-            <div v-for="(feat, i) in features" :key="feat.title" class="feature">
+            <div v-for="(feat ) in features" :key="feat.title" class="feature">
               <div class="feature-icon">
                 <i :class="['bi', feat.icon]"></i>
               </div>

@@ -10,7 +10,7 @@
             <h3 class="card-title card-title--red">Sin GST</h3>
           </div>
           <ul class="list">
-            <li v-for="(item, i) in sinGST" :key="item">
+            <li v-for="(item) in sinGST" :key="item">
               <i class="bi bi-x-lg bullet bullet--red"></i> {{ item }}
             </li>
           </ul>
@@ -22,7 +22,7 @@
             <h3 class="card-title card-title--green">Con GST</h3>
           </div>
           <ul class="list">
-            <li v-for="(item, i) in conGST" :key="item">
+            <li v-for="(item) in conGST" :key="item">
               <i class="bi bi-check2-all bullet bullet--green"></i> {{ item }}
             </li>
           </ul>
