@@ -4,9 +4,9 @@
       <div class="inner">
 
         <div class="text-col">
-          <h2 class="section-title fade-in-section">Funciones Profesionales Avanzadas</h2>
+          <h2 class="section-title">Funciones Profesionales Avanzadas</h2>
           <div class="feature-list">
-            <div v-for="(feat, i) in features" :key="feat.title" class="feature fade-in-feature" :style="{ animationDelay: `${i * 100}ms` }">
+            <div v-for="feat in features" :key="feat.title" class="feature">
               <div class="feature-icon">
                 <i :class="['bi', feat.icon]"></i>
               </div>
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div class="visual-col fade-in-section">
+        <div class="visual-col">
           <img :src="darkMode ? tecnicoVerde : tecnicoAzul" alt="tecnico" class="imgTecnico">
         </div>
 
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted } from 'vue';
+import { defineProps } from 'vue';
 defineProps({ darkMode: Boolean })
 import tecnicoAzul from '@/assets/tecnicoAzul.png'
 import tecnicoVerde from '@/assets/tecnicoVerde.png'
@@ -38,68 +38,13 @@ const features = [
   { icon: 'bi-download', title: 'Exportación de Nómina', desc: 'Exporta en un clic los reportes para el pago de técnicos y personal.' },
 ]
 
-onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.4 })
-
-  document.querySelectorAll('.fade-in-section, .fade-in-feature').forEach(el => {
-    observer.observe(el)
-  })
-})
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInFeature {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
 .features {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-feature {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-feature.animate-visible {
-  animation: fadeInFeature 0.6s ease-out forwards;
 }
 
 .container {

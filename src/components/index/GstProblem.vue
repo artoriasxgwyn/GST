@@ -1,28 +1,28 @@
 <template>
   <section class="problem">
     <div class="container">
-      <h2 class="section-title fade-in-section">¿Cuál es el problema que resuelve GST?</h2>
+      <h2 class="section-title">¿Cuál es el problema que resuelve GST?</h2>
       <div class="compare">
 
-        <div class="card card--bad fade-in-section-left">
+        <div class="card card--bad">
           <div class="card-head">
             <i class="bi bi-x-circle-fill dot dot--red"></i>
             <h3 class="card-title card-title--red">Sin GST</h3>
           </div>
           <ul class="list">
-            <li v-for="(item, i) in sinGST" :key="item" :style="{ animationDelay: `${i * 100}ms` }" class="list-item-animate">
+            <li v-for="item in sinGST" :key="item">
               <i class="bi bi-x-lg bullet bullet--red"></i> {{ item }}
             </li>
           </ul>
         </div>
 
-        <div class="card card--good fade-in-section-right">
+        <div class="card card--good">
           <div class="card-head">
             <i class="bi bi-check-circle-fill dot dot--green"></i>
             <h3 class="card-title card-title--green">Con GST</h3>
           </div>
           <ul class="list">
-            <li v-for="(item, i) in conGST" :key="item" :style="{ animationDelay: `${i * 100}ms` }" class="list-item-animate">
+            <li v-for="item in conGST" :key="item">
               <i class="bi bi-check2-all bullet bullet--green"></i> {{ item }}
             </li>
           </ul>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted } from 'vue';
+import { defineProps } from 'vue';
 defineProps({ darkMode: Boolean })
 
 const sinGST = [
@@ -47,99 +47,13 @@ const conGST = [
   'Historial completo por cliente y por equipo.',
   'Monitoreo en tiempo real de cada servicio.',
 ]
-
-//const sectionRef = ref(null)
-
-onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.4 })
-
-  document.querySelectorAll('.fade-in-section, .fade-in-section-left, .fade-in-section-right').forEach(el => {
-    observer.observe(el)
-  })
-})
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInListItem {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 .problem {
   padding: 5rem 0;
   background: var(--bg-alt);
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-section-left,
-.fade-in-section-right {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible,
-.fade-in-section-left.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-section-left.animate-visible {
-  animation: slideInLeft 0.8s ease-out forwards;
-}
-
-.fade-in-section-right.animate-visible {
-  animation: slideInRight 0.8s ease-out forwards;
-}
-
-.list-item-animate {
-  opacity: 0;
-  animation: fadeInListItem 0.5s ease-out forwards;
 }
 
 .container {

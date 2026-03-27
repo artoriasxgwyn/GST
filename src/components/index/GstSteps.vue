@@ -2,16 +2,15 @@
   <section class="steps">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title fade-in-section">¿Cómo funciona GST?</h2>
-        <p class="section-sub fade-in-section">Un flujo de trabajo optimizado en 7 pasos clave.</p>
+        <h2 class="section-title">¿Cómo funciona GST?</h2>
+        <p class="section-sub">Un flujo de trabajo optimizado en 7 pasos clave.</p>
       </div>
       <div class="grid">
         <div
           v-for="(step, i) in steps"
           :key="i"
-          class="step fade-in-step"
+          class="step"
           :class="{ 'step--cta': step.cta }"
-          :style="{ animationDelay: `${i * 80}ms` }"
         >
           <template v-if="!step.cta">
             <span class="step-num">0{{ i + 1 }}</span>
@@ -29,7 +28,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted } from 'vue';
+import { defineProps } from 'vue';
 defineProps({ darkMode: Boolean })
 
 const steps = [
@@ -42,64 +41,13 @@ const steps = [
   { icon: 'bi-credit-card-fill',      title: 'Pago',          desc: 'Liquidación de comisiones y pagos a técnicos.' },
   { cta: true },
 ]
-
-onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.4 })
-
-  document.querySelectorAll('.fade-in-section, .fade-in-step').forEach(el => {
-    observer.observe(el)
-  })
-})
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInStep {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .steps {
   padding: 3rem 0;
   background: var(--bg);
   transition: background 0.35s;
-}
-
-.fade-in-section,
-.fade-in-step {
-  opacity: 0;
-}
-
-.fade-in-section.animate-visible {
-  animation: fadeInSection 0.8s ease-out forwards;
-}
-
-.fade-in-step.animate-visible {
-  animation: fadeInStep 0.6s ease-out forwards;
 }
 
 /* Responsive para móvil (≤425px) */

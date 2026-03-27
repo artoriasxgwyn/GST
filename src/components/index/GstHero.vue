@@ -3,33 +3,33 @@
     <div class="glow"></div>
     <div class="container">
       <div class="content-col">
-        <div class="badge hero-fade-in">
+        <div class="badge">
           <i class="bi bi-rocket-takeoff-fill"></i>
           Lanzamiento Oficial: 25 de Mayo, 2026
         </div>
 
-        <h1 class="title hero-fade-in-up">
+        <h1 class="title">
           Optimiza tu Servicio<br />
           Técnico con <em>GST</em>
         </h1>
 
-        <p class="subtitle hero-fade-in-up">
+        <p class="subtitle">
           El sistema de gestión digital definitivo para centralizar tu información
           y tomar el control total de tu taller o empresa.
         </p>
 
-        <div class="countdown hero-fade-in-up">
-          <div v-for="(unit, i) in countdown" :key="unit.label" class="countdown-unit" :style="{ transitionDelay: `${i * 50}ms` }">
+        <div class="countdown">
+          <div v-for="(unit) in countdown" :key="unit.label" class="countdown-unit">
             <span class="countdown-num">{{ unit.value }}</span>
             <span class="countdown-label">{{ unit.label }}</span>
           </div>
         </div>
 
-        <p v-if="apiError" class="api-note hero-fade-in-up">
+        <p v-if="apiError" class="api-note">
           <i class="bi bi-wifi-off"></i> Usando tiempo local
         </p>
 
-        <button class="btn-primary hero-fade-in-up" @click="scrollToPricing">
+        <button class="btn-primary" @click="scrollToPricing">
           <span>Solicitar Acceso Anticipado</span>
           <i class="bi bi-arrow-right btn-arrow"></i>
         </button>
@@ -95,23 +95,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -133,23 +116,6 @@ onUnmounted(() => {
   background-repeat: no-repeat;
   transition: background-image 0.35s ease;
 }
-
-/* Animaciones de entrada */
-.hero-fade-in {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-.hero-fade-in-up {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.badge.hero-fade-in { animation-delay: 0.1s; }
-.title.hero-fade-in-up { animation-delay: 0.2s; }
-.subtitle.hero-fade-in-up { animation-delay: 0.3s; }
-.countdown.hero-fade-in-up { animation-delay: 0.4s; }
-.api-note.hero-fade-in-up { animation-delay: 0.5s; }
-.btn-primary.hero-fade-in-up { animation-delay: 0.6s; }
 
 @media (max-width:768px) {
   .hero {

@@ -144,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue'
+import { ref, computed, onUnmounted, defineProps,onMounted} from 'vue'
 import { useCartStore } from '@/stores/cartStore'
 
 defineProps({ darkMode: Boolean })
@@ -352,14 +352,14 @@ onMounted(() => {
   [50, 150, 300, 600, 1000].forEach(ms => setTimeout(updateViewportWidth, ms))
 })
 
-onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
-
 const closeAll = (e) => {
 if (!e.target.closest('.plan-card') && !e.target.closest('.storage-card')) {
   selectedPlanIndex.value    = null
   selectedStorageIndex.value = null
 }
 }
+
+onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
 const addPlanToCart = (plan) => {
 const price = annual.value ? parseFloat((plan.rawPrice * 0.8).toFixed(2)) : plan.rawPrice
@@ -397,46 +397,9 @@ const allFeatures = [
 
 const inputTB    = ref(2)
 const inputPrice = computed(() => Math.ceil((inputTB.value * 1024 * 40) / 4000))
-
-onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-visible')
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.4 })
-
-  document.querySelectorAll('.pricing-header, .plan-card-animate, .storage-cards-wrap').forEach(el => {
-    observer.observe(el)
-  })
-})
 </script>
 
 <style scoped>
-/* ══ ANIMACIONES DE ENTRADA ══ */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 .pricing {
 padding: 5rem 0;
 background: var(--bg-alt);
@@ -446,11 +409,6 @@ transition: background 0.35s;
 .header {
   text-align: center;
   margin-bottom: 3.5rem;
-  opacity: 0;
-}
-
-.header.animate-visible {
-  animation: fadeInUp 0.8s ease-out forwards;
 }
 
 .container {
