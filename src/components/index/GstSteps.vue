@@ -170,39 +170,23 @@ const steps = [
 }
 
 .step {
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-soft);
   border-radius: 0.75rem;
   padding: 1.25rem;
   background: var(--bg-card);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-}
-
-.step::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s ease;
-}
-
-.step:hover::before {
-  transform: scaleX(1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .step:hover {
+  transform: translateY(-6px) scale(1.02);
   border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px var(--accent-glow);
+  box-shadow: 0 12px 32px var(--accent-glow);
 }
 
 @media (min-width: 640px) {
@@ -210,10 +194,6 @@ const steps = [
     border-radius: 1rem;
     padding: 1.5rem;
   }
-}
-
-.step:hover {
-  border-color: var(--accent);
 }
 
 .step--cta {
@@ -262,7 +242,7 @@ const steps = [
 }
 
 .step:hover .step-icon {
-  transform: scale(1.15) rotate(5deg);
+  transform: scale(1.05);
 }
 
 @media (min-width: 640px) {

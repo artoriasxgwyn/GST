@@ -6,7 +6,7 @@
         <div class="text-col">
           <h2 class="section-title">Funciones Profesionales Avanzadas</h2>
           <div class="feature-list">
-            <div v-for="feat in features" :key="feat.title" class="feature">
+            <div v-for="(feat, i) in features" :key="feat.title" class="feature">
               <div class="feature-icon">
                 <i :class="['bi', feat.icon]"></i>
               </div>
@@ -37,7 +37,6 @@ const features = [
   { icon: 'bi-stopwatch-fill', title: 'Visualización de Tiempo Admin', desc: 'Calcula cuánto tiempo dedicas realmente a la gestión administrativa vs. técnica.' },
   { icon: 'bi-download', title: 'Exportación de Nómina', desc: 'Exporta en un clic los reportes para el pago de técnicos y personal.' },
 ]
-
 </script>
 
 <style scoped>
@@ -102,14 +101,17 @@ const features = [
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  padding: 0.5rem;
+  padding: 1rem;
   border-radius: 0.75rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
 }
 
 .feature:hover {
-  background: var(--border-soft);
+  background: var(--bg-alt);
+  border-color: var(--border-soft);
   transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .feature-icon {
@@ -124,14 +126,13 @@ const features = [
   justify-content: center;
   font-size: 1.35rem;
   color: var(--accent);
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .feature:hover .feature-icon {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 4px 16px var(--accent-glow);
+  transform: scale(1.15);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
 .feature-title {

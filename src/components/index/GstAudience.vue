@@ -3,7 +3,7 @@
     <div class="container">
       <h2 class="section-title">¿Para quién es GST?</h2>
       <div class="grid">
-        <div v-for="(item) in audience" :key="item.title" class="item">
+        <div v-for="(item, i) in audience" :key="item.title" class="item">
           <div class="icon-wrap">
             <i :class="['bi', item.icon]"></i>
           </div>
@@ -52,9 +52,9 @@ const audience = [
 
 .section-title {
   font-size: clamp(1.6rem, 5vw, 2.6rem);
-  font-weight: 900; 
+  font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--text); 
+  color: var(--text);
   margin-bottom: 2rem; /* Reducido en móvil */
   transition: color 0.35s;
   line-height: 1.2;
@@ -91,37 +91,20 @@ const audience = [
   width: 4rem;
   height: 4rem;
   border-radius: 0.75rem;
-  background: var(--border-soft);
-  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-soft);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.8rem;
   color: var(--accent);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.item:hover .icon-wrap::after {
-  opacity: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .item:hover .icon-wrap {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 24px var(--accent-glow);
+  transform: scale(1.15);
   border-color: var(--accent);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
 @media (min-width: 480px) {

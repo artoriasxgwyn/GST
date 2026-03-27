@@ -10,7 +10,7 @@
             <h3 class="card-title card-title--red">Sin GST</h3>
           </div>
           <ul class="list">
-            <li v-for="item in sinGST" :key="item">
+            <li v-for="(item, i) in sinGST" :key="item">
               <i class="bi bi-x-lg bullet bullet--red"></i> {{ item }}
             </li>
           </ul>
@@ -22,7 +22,7 @@
             <h3 class="card-title card-title--green">Con GST</h3>
           </div>
           <ul class="list">
-            <li v-for="item in conGST" :key="item">
+            <li v-for="(item, i) in conGST" :key="item">
               <i class="bi bi-check2-all bullet bullet--green"></i> {{ item }}
             </li>
           </ul>
@@ -96,12 +96,13 @@ const conGST = [
   border-radius: 1rem;
   padding: 2rem;
   background: var(--bg-card);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .card--bad {
-  border-color: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .card--good {
@@ -109,18 +110,17 @@ const conGST = [
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .card--bad:hover {
-  border-color: rgba(239, 68, 68, 0.4);
-  box-shadow: 0 12px 40px rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
 }
 
 .card--good:hover {
   border-color: var(--accent);
-  box-shadow: 0 12px 40px var(--accent-glow);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .card-head {
@@ -156,7 +156,7 @@ const conGST = [
 }
 
 .card:hover .dot {
-  transform: scale(1.1) rotate(10deg);
+  transform: scale(1.15);
 }
 
 .dot--red {
@@ -182,7 +182,12 @@ const conGST = [
   font-size: 0.95rem;
   color: var(--text);
   line-height: 1.55;
-  transition: color 0.35s;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
+}
+
+.list li:hover {
+  transform: translateX(4px);
 }
 
 .bullet {

@@ -221,7 +221,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh; /* Mobile viewport height */
   transition: background-color var(--transition-slow), color var(--transition-slow);
-
+  
   width: 100%;
   max-width: 2560px;
   margin: 0 auto;
@@ -234,6 +234,7 @@ body {
     max-width: 2560px;
   }
 }
+
 
 .container {
   width: 100%;
@@ -414,9 +415,7 @@ button {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .app {
-    padding-bottom: var(--space-20);
-  }
+
 
   .gst-toast-msg {
     top: var(--space-16);

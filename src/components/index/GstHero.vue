@@ -1,5 +1,5 @@
 <template>
-  <section class="hero">
+  <section class="hero" ref="heroRef">
     <div class="glow"></div>
     <div class="container">
       <div class="content-col">
@@ -49,6 +49,8 @@ const props = defineProps({
   toggleForm: Function
 })
 
+//const heroRef = ref(null)
+
 const scrollToPricing = () => {
   document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
@@ -95,16 +97,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
 .hero {
   position: relative;
   overflow: hidden;
@@ -196,7 +188,13 @@ onUnmounted(() => {
   padding: 0.35rem 0.9rem;
   border-radius: 9999px;
   margin-bottom: 1.25rem;
-  transition: background 0.35s, border-color 0.35s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.badge:hover {
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: scale(1.05);
 }
 
 @media (max-width: 640px) {
@@ -262,31 +260,16 @@ onUnmounted(() => {
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   padding: 0.75rem 0.6rem;
-  background: var(--border-soft);
+  background: var(--bg-card);
   min-width: 3.5rem;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.countdown-unit::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 .countdown-unit:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 16px var(--accent-glow);
-}
-
-.countdown-unit:hover::after {
-  opacity: 1;
 }
 
 @media (max-width: 640px) {
@@ -328,15 +311,15 @@ onUnmounted(() => {
 
 .btn-primary {
   margin-top: 0.5rem;
-  background: transparent;
-  color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
   border: 2px solid var(--accent);
   border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 700;
   padding: 0.8rem 2rem;
   cursor: pointer;
-  box-shadow: 0 0 18px var(--accent-glow);
+  box-shadow: 0 4px 16px var(--accent-glow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
@@ -349,7 +332,7 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
   transform: translateX(-100%);
   transition: transform 0.5s ease;
 }
@@ -359,10 +342,8 @@ onUnmounted(() => {
 }
 
 .btn-primary:hover {
-  background: var(--accent);
-  color: var(--accent-text);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 40px var(--accent-glow);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .btn-primary:active {

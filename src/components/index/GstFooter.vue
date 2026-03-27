@@ -97,6 +97,7 @@ const props = defineProps({ darkMode: Boolean })
   border-top: 1px solid var(--border-light);
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
+
 .footer-top {
   display: flex;
   width: 100%;
